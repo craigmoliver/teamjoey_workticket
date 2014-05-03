@@ -34,12 +34,12 @@ public class WorkTicketServlet extends HttpServlet {
 	    String command = request.getParameter("command");
 	    System.out.println("Controller GET command:"+command);
 	    if (command == null){ //initial request or back from edit cart
-	    	
+	    	dispatcher = ctx.getRequestDispatcher("/createUser.jsp");
 	    	//request.setAttribute("catalog",catalog);
 	    	
 	    }
 	    else {
-	    	dispatcher = ctx.getRequestDispatcher("/createUser.jsp");//not found page
+	    	dispatcher = ctx.getRequestDispatcher("/notFound.jsp");//not found page
 	    }
 	    dispatcher.forward(request,response);
 	}
