@@ -39,7 +39,7 @@ public class WorkTicketServlet extends HttpServlet {
 	    	
 	    }
 	    else {
-	    	dispatcher = ctx.getRequestDispatcher("/notFound.jsp");//not found page
+	    	dispatcher = ctx.getRequestDispatcher("/createUser.jsp");//not found page
 	    }
 	    dispatcher.forward(request,response);
 	}
