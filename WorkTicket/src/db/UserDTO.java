@@ -8,8 +8,9 @@ package db;
  *
  */
 public class UserDTO {
+	private boolean isNew;
 	private String username;
-	private	byte[] passhash;
+	private	String passhash;
 	private String email;
 	private String name;
 	
@@ -17,8 +18,9 @@ public class UserDTO {
 	 * 
 	 */
 	public UserDTO() {
+		setNew(true);
 		setUsername("");
-		setPasshash(new byte[0]);
+		setPasshash("");
 		setEmail("");
 		setName("");
 	}
@@ -27,13 +29,28 @@ public class UserDTO {
 	 * 
 	 * @return
 	 */
-	public UserDTO(String username, byte[] passhash, String email, String name) {
+	public UserDTO(String username, String passhash, String email, String name) {
+		setNew(false);
 		setUsername(username);
 		setPasshash(passhash);
 		setEmail(email);
 		setName(name);
 	}
 	
+	/**
+	 * @return the isNew
+	 */
+	public boolean isNew() {
+		return isNew;
+	}
+
+	/**
+	 * @param isNew the isNew to set
+	 */
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+
 	/**
 	 * 
 	 * @return
@@ -53,14 +70,14 @@ public class UserDTO {
 	/**
 	 * @return the passhash
 	 */
-	public byte[] getPasshash() {
+	public String getPasshash() {
 		return passhash;
 	}
 
 	/**
 	 * @param passhash the passhash to set
 	 */
-	public void setPasshash(byte[] passhash) {
+	public void setPasshash(String passhash) {
 		this.passhash = passhash;
 	}
 

@@ -29,14 +29,26 @@ public class WorkTicketServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext ctx = this.getServletContext();
-		//HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 		RequestDispatcher dispatcher = null;
 	    String command = request.getParameter("command");
 	    System.out.println("Controller GET command:"+command);
-	    if (command == null){ //initial request or back from edit cart
-	    	dispatcher = ctx.getRequestDispatcher("/createUser.jsp");
-	    	//request.setAttribute("catalog",catalog);
+	    
+	    
+	    
+	    if (command == null){ //initial request
 	    	
+	    	dispatcher = ctx.getRequestDispatcher("/login.jsp");
+	    	/*	
+	    }
+	    else if (command.equals("user_edit")) {
+
+	    	UserHelper userHelper = new UserHelper();
+	    	request.setAttribute("formheader", "");
+	    	request.setAttribute("userHelper", userHelper);
+	    	
+	    	dispatcher = ctx.getRequestDispatcher("/editUser.jsp");
+	    	*/
 	    }
 	    else {
 	    	dispatcher = ctx.getRequestDispatcher("/notFound.jsp");//not found page
@@ -50,6 +62,30 @@ public class WorkTicketServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext ctx = this.getServletContext();
 		RequestDispatcher dispatcher = null;
+		String command = request.getParameter("command");
+		
+		System.out.println("Controller POST command:"+command);
+		
+		if (command.equals("user_login")) {
+			String attrUsername = request.getParameter("username");
+			String attrPassword = request.getParameter("password");
+			
+			if (UserTicket.validPassword(attrUsername, attrPassword)) {
+				dispatcher = ctx.getRequestDispatcher("/ticketList.jsp");
+			}
+			else {
+				dispatcher = ctx.getRequestDispatcher("/loginFailed.jsp");
+			}
+			
+		}
+		else if (command.equals("user_save")) {
+			String attrName = request.getParameter("name");
+			String attrEmail = request.getParameter("email");
+			String attrUsername = request.getParameter("username");
+			String attrPassword = request.getParameter("password");			
+			UserHelper.saveUser(attrName, attrEmail, attrUsername, attrPassword);
+			dispatcher = ctx.getRequestDispatcher("/createUser.jsp");
+		}
 		
 		dispatcher.forward(request,response);
 	}

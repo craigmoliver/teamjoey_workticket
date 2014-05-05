@@ -44,8 +44,8 @@ public class WorkTicketDAO {
 			
 			// LOCALHOST configuration
 			String jdbcUrl = "jdbc:mysql://localhost:3306/workticket";
-			String username = "root";
-			String password = "wax&sh1ne";
+			String username = "awsuser";
+			String password = "abc123";
 
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
@@ -219,7 +219,7 @@ public class WorkTicketDAO {
 			while (rs.next()) {
 				return new UserDTO(
 						rs.getString(1), // userName
-						rs.getBytes(2), // passhash
+						rs.getString(2), // passhash
 						rs.getString(3), // email
 						rs.getString(4)); // name
 			}
@@ -237,10 +237,9 @@ public class WorkTicketDAO {
 	 */
 	public String saveUser(UserDTO user) {
 		try{
-			if (user.getUsername() == "") {
-				//
+			if (!user.isNew()) {
 				updateUserStatement.setString(1, user.getUsername());
-				updateUserStatement.setBytes(2, user.getPasshash());
+				updateUserStatement.setString(2, user.getPasshash());
 				updateUserStatement.setString(3, user.getEmail());
 				updateUserStatement.setString(4, user.getName());
 				updateUserStatement.executeUpdate();
@@ -249,7 +248,7 @@ public class WorkTicketDAO {
 			else {
 				//
 				insertUserStatement.setString(1, user.getUsername());
-				insertUserStatement.setBytes(2, user.getPasshash());
+				insertUserStatement.setString(2, user.getPasshash());
 				insertUserStatement.setString(3, user.getEmail());
 				insertUserStatement.setString(4, user.getName());
 				insertUserStatement.executeUpdate();
