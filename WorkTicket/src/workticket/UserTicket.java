@@ -3,7 +3,6 @@
  */
 package workticket;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -13,7 +12,7 @@ import db.UserDTO;
 import db.WorkTicketDAO;
 
 /**
- * @author craigmoliver
+ * @author 
  *
  */
 public class UserTicket {

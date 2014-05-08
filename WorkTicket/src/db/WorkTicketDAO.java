@@ -20,16 +20,20 @@ public class WorkTicketDAO {
 	 * 
 	 */
 	protected PreparedStatement selectAnnotationStatement;
+	protected PreparedStatement selectAllAnnotationStatement;
 	protected PreparedStatement updateAnnotationStatement;
 	protected PreparedStatement insertAnnotationStatement;
+	protected PreparedStatement selectTicketAnnotationsStatement;
 	protected PreparedStatement selectTicketStatement;
+	protected PreparedStatement selectAllTicketStatement;
+	protected PreparedStatement selectAllTicketAssignedToStatement;
 	protected PreparedStatement updateTicketStatement;
 	protected PreparedStatement insertTicketStatement;
 	protected PreparedStatement selectAllUserStatement;
 	protected PreparedStatement selectUserStatement;
 	protected PreparedStatement updateUserStatement;
 	protected PreparedStatement insertUserStatement;
-	protected PreparedStatement selectTicketAnnotationsStatement;
+	
 	
 	/**
 	 * 
@@ -51,15 +55,17 @@ public class WorkTicketDAO {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
 			
-			selectAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorName, text FROM annotation WHERE annotationId = ?");
-			updateAnnotationStatement = conn.prepareStatement("UPDATE annotation SET ticketId = ?, authorName = ?, text ? WHERE annotationId = ?");
-			insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorName, text) VALUES(?, ?, ?)");
+			selectAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE annotationId = ?");
+			selectAllAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation ORDER BY datePosted DESC");
+			updateAnnotationStatement = conn.prepareStatement("UPDATE annotation SET ticketId = ?, authorUsername = ?, text = ?, datePosted = ? WHERE annotationId = ?");
+			insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)");
+			selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE ticketId = ? ORDER BY datePosted DESC");
 			
-			selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description FROM ticket WHERE ticketId = ?");
-			updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ? WHERE ticketId = ?");
-			insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description) VALUES(?, ?, ?)");
-			
-			selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorName, text FROM annotation WHERE ticketId = ?");
+			selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE ticketId = ?");
+			selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket ORDER BY datePosted ASC");
+			selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
+			updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ? WHERE ticketId = ?");
+			insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)");
 			
 			selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
 			selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
@@ -88,13 +94,39 @@ public class WorkTicketDAO {
 						rs.getInt(1), // annotationId
 						rs.getInt(2), // ticketId
 						rs.getString(3), // authorName
-						rs.getString(4)); // text
+						rs.getString(4), // text
+						rs.getDate(5)); // datePosted 
 			}
 		}
 		catch (SQLException e) {
 			System.out.println("Exception retrieving annotation: " + e.getMessage());
 		}
 		return new AnnotationDTO();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<AnnotationDTO> listAnnotations(){
+		try{		
+			ResultSet rs = selectAllAnnotationStatement.executeQuery();
+			ArrayList<AnnotationDTO> annotations = new ArrayList<AnnotationDTO>();
+			while (rs.next()) {
+				annotations.add(new AnnotationDTO(
+									rs.getInt(1), // annotationId
+									rs.getInt(2), // ticketId
+									rs.getString(3), // authorUsername
+									rs.getString(4), // text
+									rs.getDate(5)	// datePosted
+									));  
+			}
+			return annotations;
+		}
+		catch (SQLException e) {
+			System.out.println("Exception retrieving annotation: " + e.getMessage());
+		}
+		return new ArrayList<AnnotationDTO>();
 	}
 	
 	/**
@@ -111,8 +143,10 @@ public class WorkTicketDAO {
 				annotations.add(new AnnotationDTO(
 									rs.getInt(1), // annotationId
 									rs.getInt(2), // ticketId
-									rs.getString(3), // authorName
-									rs.getString(4))); // text
+									rs.getString(3), // authorUsername
+									rs.getString(4), // text
+									rs.getDate(5)	// datePosted
+									));  
 			}
 			return annotations;
 		}
@@ -130,17 +164,20 @@ public class WorkTicketDAO {
 	public int saveAnnotation(AnnotationDTO annotation) {
 		try{
 			if (annotation.getAnnotationId() > 0) {
-				updateAnnotationStatement.setInt(1, annotation.getTicketId());
-				updateAnnotationStatement.setString(2, annotation.getAuthorName());
-				updateAnnotationStatement.setString(3, annotation.getText());
-				updateAnnotationStatement.setInt(4, annotation.getAnnotationId());
+				
+				updateAnnotationStatement.setInt(1, annotation.getAnnotationId());
+				updateAnnotationStatement.setInt(2, annotation.getTicketId());
+				updateAnnotationStatement.setString(3, annotation.getAuthorUsername());
+				updateAnnotationStatement.setString(4, annotation.getText());
+				updateAnnotationStatement.setDate(5, new java.sql.Date(annotation.getDatePosted().getTimeInMillis()));
 				updateAnnotationStatement.executeUpdate();
 				return annotation.getAnnotationId();
 			}
 			else {
-				insertAnnotationStatement.setString(1, annotation.getAuthorName());
-				insertAnnotationStatement.setString(2, annotation.getText());
-				insertAnnotationStatement.setInt(3, annotation.getAnnotationId());
+				insertAnnotationStatement.setInt(1, annotation.getTicketId());
+				insertAnnotationStatement.setString(2, annotation.getAuthorUsername());
+				insertAnnotationStatement.setString(3, annotation.getText());
+				insertAnnotationStatement.setDate(4, new java.sql.Date(annotation.getDatePosted().getTimeInMillis()));
 				insertAnnotationStatement.executeUpdate();
 				ResultSet keys = insertAnnotationStatement.getGeneratedKeys();
 				keys.next();
@@ -163,12 +200,12 @@ public class WorkTicketDAO {
 			selectTicketStatement.setInt(1, ticketId);
 			ResultSet rs = selectTicketStatement.executeQuery();
 			while (rs.next()) {
-
 				return new TicketDTO(
 						rs.getInt(1), // ticketId
 						rs.getDate(2), // datePosted
 						rs.getString(3), // title
-						rs.getString(4)); // description
+						rs.getString(4), // description
+						rs.getString(5)); // assignedTo 
 			}
 		}
 		catch (SQLException e) {
@@ -179,17 +216,68 @@ public class WorkTicketDAO {
 	
 	/**
 	 * 
+	 * @return
+	 */
+	public ArrayList<TicketDTO> listTickets() {
+		try{		
+			ResultSet rs = selectAllTicketStatement.executeQuery();
+			ArrayList<TicketDTO> tickets = new ArrayList<TicketDTO>();
+			while (rs.next()) {
+				tickets.add(new TicketDTO(
+							rs.getInt(1), // ticketId
+							rs.getDate(2), // datePosted
+							rs.getString(3), // title
+							rs.getString(4), // description
+							rs.getString(5) // assignedTo 
+							));
+			}
+			return tickets;
+		}
+		catch (SQLException e) {
+			System.out.println("Exception retrieving ticket: " + e.getMessage());
+		}
+		return new ArrayList<TicketDTO>();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<TicketDTO> listTickets(String assignedTo) {
+		try{
+			selectAllTicketAssignedToStatement.setString(1, assignedTo);
+			ResultSet rs = selectAllTicketAssignedToStatement.executeQuery();
+			ArrayList<TicketDTO> tickets = new ArrayList<TicketDTO>();
+			while (rs.next()) {
+				tickets.add(new TicketDTO(
+							rs.getInt(1), // ticketId
+							rs.getDate(2), // datePosted
+							rs.getString(3), // title
+							rs.getString(4), // description
+							rs.getString(5) // assignedTo 
+							));
+			}
+			return tickets;
+		}
+		catch (SQLException e) {
+			System.out.println("Exception retrieving ticket: " + e.getMessage());
+		}
+		return new ArrayList<TicketDTO>();
+	}
+	
+	/**
+	 * 
 	 * @param ticket
 	 * @return
 	 */
 	public int saveTicket(TicketDTO ticket) {
 		try{
 			if (ticket.getTicketId() > 0) {
-				
 				updateTicketStatement.setDate(1, new java.sql.Date(ticket.getDatePosted().getTimeInMillis()));
 				updateTicketStatement.setString(2, ticket.getTitle());
 				updateTicketStatement.setString(3, ticket.getDescription());
-				updateTicketStatement.setInt(4, ticket.getTicketId());
+				updateTicketStatement.setString(4, ticket.getAssignedTo());
+				updateTicketStatement.setInt(5, ticket.getTicketId());
 				updateTicketStatement.executeUpdate();
 				return ticket.getTicketId();
 			}
@@ -197,6 +285,7 @@ public class WorkTicketDAO {
 				insertTicketStatement.setDate(1, new java.sql.Date(ticket.getDatePosted().getTimeInMillis()));
 				insertTicketStatement.setString(2, ticket.getTitle());
 				insertTicketStatement.setString(3, ticket.getDescription());
+				insertTicketStatement.setString(4, ticket.getAssignedTo());
 				insertTicketStatement.executeUpdate();
 				ResultSet keys = insertTicketStatement.getGeneratedKeys();
 				keys.next();

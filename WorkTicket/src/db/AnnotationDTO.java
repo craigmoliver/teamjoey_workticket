@@ -3,6 +3,10 @@
  */
 package db;
 
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * @author TeamJoey
  *
@@ -10,8 +14,9 @@ package db;
 public class AnnotationDTO {
 	private int annotationId;
 	private int ticketId;
-	private String authorName;
+	private String authorUsername;
 	private String text;
+	private GregorianCalendar datePosted;
 	
 	/**
 	 * 
@@ -19,19 +24,33 @@ public class AnnotationDTO {
 	public AnnotationDTO() {
 		setAnnotationId(0);
 		setTicketId(0);
-		setAuthorName("");
+		setAuthorUsername("");
 		setText("");
+		setDatePosted(new GregorianCalendar());
 	}
 	
 	/**
 	 * 
 	 * @param annotationId
 	 */
-	public AnnotationDTO(int annotationId, int ticketId, String authorName, String text) {
+	public AnnotationDTO(int annotationId, int ticketId, String authorName, String text, Date datePosted) {
 		setAnnotationId(annotationId);
 		setTicketId(ticketId);
-		setAuthorName(authorName);
+		setAuthorUsername(authorName);
 		setText(text);
+		
+		// setup calendar
+		GregorianCalendar calDatePosted = new GregorianCalendar();
+		calDatePosted.setTime(datePosted);
+		setDatePosted(calDatePosted);
+	}
+	
+	/**
+	 * Returns datePosted as java.util.Date
+	 * @return 
+	 */
+	public java.util.Date getDatePostedAsDate() {
+		return this.datePosted.getTime();
 	}
 	
 	/**
@@ -64,15 +83,15 @@ public class AnnotationDTO {
 	/**
 	 * @return the authorName
 	 */
-	public String getAuthorName() {
-		return authorName;
+	public String getAuthorUsername() {
+		return authorUsername;
 	}
 
 	/**
 	 * @param authorName the authorName to set
 	 */
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
+	public void setAuthorUsername(String authorUsername) {
+		this.authorUsername = authorUsername;
 	}
 
 	/**
@@ -87,6 +106,20 @@ public class AnnotationDTO {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	/**
+	 * @return the datePosted
+	 */
+	public GregorianCalendar getDatePosted() {
+		return datePosted;
+	}
+
+	/**
+	 * @param datePosted the datePosted to set
+	 */
+	public void setDatePosted(GregorianCalendar datePosted) {
+		this.datePosted = datePosted;
 	}
 	
 	

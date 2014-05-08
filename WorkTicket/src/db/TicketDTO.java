@@ -16,6 +16,7 @@ public class TicketDTO {
 	private GregorianCalendar datePosted;
 	private String title;
 	private String description;
+	private String assignedTo;
 	
 	/**
 	 * 
@@ -25,6 +26,7 @@ public class TicketDTO {
 		setDatePosted(new GregorianCalendar());
 		setTitle("");
 		setDescription("");
+		setAssignedTo("");
 	}
 	
 	/**
@@ -34,7 +36,7 @@ public class TicketDTO {
 	 * @param title
 	 * @param description
 	 */
-	public TicketDTO(int ticketId, Date datePosted, String title, String description) {
+	public TicketDTO(int ticketId, Date datePosted, String title, String description, String assignedTo) {
 		// setup calendar
 		GregorianCalendar calDatePosted = new GregorianCalendar();
 		calDatePosted.setTime(datePosted);
@@ -43,6 +45,15 @@ public class TicketDTO {
 		setDatePosted(calDatePosted);
 		setTitle(title);
 		setDescription(description);
+		setAssignedTo(assignedTo);
+	}
+	
+	/**
+	 * Returns datePosted as java.util.Date
+	 * @return 
+	 */
+	public java.util.Date getDatePostedAsDate() {
+		return this.datePosted.getTime();
 	}
 	
 	
@@ -93,5 +104,19 @@ public class TicketDTO {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the assignedTo
+	 */
+	public String getAssignedTo() {
+		return assignedTo;
+	}
+
+	/**
+	 * @param assignedTo the assignedTo to set
+	 */
+	public void setAssignedTo(String assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 }
