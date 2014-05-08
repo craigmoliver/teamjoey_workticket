@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import db.TicketDTO;
 import db.AnnotationDTO;
 import db.WorkTicketDAO;
+import db.UserDTO;
 
 /**
  * @author 
@@ -18,6 +19,7 @@ public class TicketHelper {
 	private AnnotationDTO latestAnnotation;
 	private ArrayList<AnnotationDTO> annotations;
 	private Boolean hasAnnotations;
+	private ArrayList<String> users;
 	
 	/**
 	 * 
@@ -26,7 +28,6 @@ public class TicketHelper {
 	public TicketHelper(int ticketId) {
 		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
 		setTicket(workTicketDAO.loadTicket(ticketId));
-		
 		ArrayList<AnnotationDTO> annotations = workTicketDAO.listTicketAnnotations(ticketId);
 		if (annotations.size() > 0) {
 			setLastestAnnotation(annotations.get(0));
@@ -37,6 +38,13 @@ public class TicketHelper {
 			setHasAnnotations(false);
 		}
 		setAnnotations(annotations);
+		
+		ArrayList<String> users = new ArrayList<String>();
+		users.add(""); // add blank option
+		for (UserDTO user: workTicketDAO.listUsers()) { // adds users for select box
+			users.add(user.getUsername());
+		}
+		setUsers(users);
 	}
 	
 	/**
@@ -64,6 +72,17 @@ public class TicketHelper {
 			tickets.add(new TicketHelper(ticketDTO.getTicketId()));
 		}
 		return tickets;
+	}
+	
+	/**
+	 * 
+	 * @param ticket
+	 * @param assignTo
+	 */
+	public static void assignTo(TicketDTO ticket, String assignTo) {
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		ticket.setAssignedTo(assignTo);
+		workTicketDAO.saveTicket(ticket);
 	}
 	
 	/**
@@ -115,6 +134,20 @@ public class TicketHelper {
 	 */
 	public void setHasAnnotations(Boolean hasAnnotations) {
 		this.hasAnnotations = hasAnnotations;
+	}
+
+	/**
+	 * @return the users
+	 */
+	public ArrayList<String> getUsers() {
+		return users;
+	}
+
+	/**
+	 * @param users the users to set
+	 */
+	public void setUsers(ArrayList<String> users) {
+		this.users = users;
 	}
 	
 	

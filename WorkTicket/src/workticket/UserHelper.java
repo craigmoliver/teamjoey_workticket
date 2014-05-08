@@ -38,6 +38,12 @@ public class UserHelper {
 		populateAllRoles();
 	}	
 	
+	public static Boolean userExists(String username) {
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		UserDTO user = workTicketDAO.loadUser(username);
+		return !user.getUsername().isEmpty(); // user exists if UserDTO has Username value
+	}	
+	
 	/**
 	 * 
 	 */
@@ -61,7 +67,9 @@ public class UserHelper {
 			user.setEmail(email);
 			user.setName(name);
 			user.setUsername(username);
-			user.setPasshash(PasswordHash.createHash(password));
+			if ((password.length() > 0 && user.isNewUser()) || !user.isNewUser()) { // update if set, save if new
+				user.setPasshash(PasswordHash.createHash(password));
+			}
 			user.setRole(role);
 			workTicketDAO.saveUser(user);
 		} catch (NoSuchAlgorithmException e) {

@@ -26,7 +26,7 @@
 						<c:forEach items="${tickets}" var="ticketHelper" varStatus="status">
 							<%-- Emit a row containing TODO --%>
 							<tr>
-								<td><a href="/ticket?command=ticket_view&ticketId=${ticketHelper.ticket.ticketId}" class="btn btn-primary btn-sm">${ticket.ticketId}</a></td>
+								<td><a href="/ticket?command=ticket_view&ticketId=${ticketHelper.ticket.ticketId}" class="btn btn-link">${ticketHelper.ticket.ticketId}</a></td>
 								<td>${ticketHelper.ticket.title}</td>
 								<c:if test="${ticketHelper.hasAnnotations}">
 									<td><fmt:formatDate type="both" value="${ticketHelper.latestAnnotation.datePostedAsDate}" /></td>

@@ -38,8 +38,7 @@ public class AnnotationDTO {
 		setTicketId(ticketId);
 		setAuthorUsername(authorName);
 		setText(text);
-		
-		// setup calendar
+		// setup calendar for datePosted
 		GregorianCalendar calDatePosted = new GregorianCalendar();
 		calDatePosted.setTime(datePosted);
 		setDatePosted(calDatePosted);
