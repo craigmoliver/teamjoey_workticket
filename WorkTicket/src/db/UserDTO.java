@@ -3,52 +3,57 @@
  */
 package db;
 
+import java.util.ArrayList;
+
 /**
  * @author TeamJoey
  *
  */
 public class UserDTO {
-	private boolean isNew;
+	private boolean newUser;
 	private String username;
 	private	String passhash;
 	private String email;
 	private String name;
+	private String role;
 	
 	/**
 	 * 
 	 */
 	public UserDTO() {
-		setNew(true);
+		setNewUser(true);
 		setUsername("");
 		setPasshash("");
 		setEmail("");
 		setName("");
+		setRole("Worker");
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public UserDTO(String username, String passhash, String email, String name) {
-		setNew(false);
+	public UserDTO(String username, String passhash, String email, String name, String role) {
+		setNewUser(false);
 		setUsername(username);
 		setPasshash(passhash);
 		setEmail(email);
 		setName(name);
-	}
-	
-	/**
-	 * @return the isNew
-	 */
-	public boolean isNew() {
-		return isNew;
+		setRole(role);
 	}
 
 	/**
-	 * @param isNew the isNew to set
+	 * @return the newUser
 	 */
-	public void setNew(boolean isNew) {
-		this.isNew = isNew;
+	public boolean isNewUser() {
+		return newUser;
+	}
+
+	/**
+	 * @param newUser the newUser to set
+	 */
+	public void setNewUser(boolean newUser) {
+		this.newUser = newUser;
 	}
 
 	/**
@@ -107,5 +112,19 @@ public class UserDTO {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

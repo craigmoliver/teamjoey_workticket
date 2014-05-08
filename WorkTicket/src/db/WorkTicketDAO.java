@@ -25,6 +25,7 @@ public class WorkTicketDAO {
 	protected PreparedStatement selectTicketStatement;
 	protected PreparedStatement updateTicketStatement;
 	protected PreparedStatement insertTicketStatement;
+	protected PreparedStatement selectAllUserStatement;
 	protected PreparedStatement selectUserStatement;
 	protected PreparedStatement updateUserStatement;
 	protected PreparedStatement insertUserStatement;
@@ -60,9 +61,10 @@ public class WorkTicketDAO {
 			
 			selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorName, text FROM annotation WHERE ticketId = ?");
 			
-			selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name FROM user WHERE username = ?");
-			updateUserStatement = conn.prepareStatement("UPDATE user SET username = ?, passHash = ?, email = ?, name = ? WHERE username = ?");
-			insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name) VALUES(?, ?, ?, ?)");
+			selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
+			selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
+			updateUserStatement = conn.prepareStatement("UPDATE user SET username = ?, passHash = ?, email = ?, name = ?, role = ? WHERE username = ?");
+			insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name, role) VALUES(?, ?, ?, ?, ?)");
 			
 			// SQL to query the database.
 		} catch (Exception e) {
@@ -207,6 +209,27 @@ public class WorkTicketDAO {
 		return 0;
 	}
 
+	public ArrayList<UserDTO> listUsers(){
+		try{		
+			ResultSet rs = selectAllUserStatement.executeQuery();
+			ArrayList<UserDTO> list = new ArrayList<UserDTO>();
+			while (rs.next()) {
+				list.add(new UserDTO(
+						rs.getString(1), 	// userName
+						rs.getString(2), 	// passhash
+						rs.getString(3), 	// email
+						rs.getString(4),	// name
+						rs.getString(5)));	//role 
+			}
+			return list;
+		}
+		catch (SQLException e) {
+			System.out.println("Exception retrieving list of users: " + e.getMessage());
+		}
+		return new ArrayList<UserDTO>();
+		
+	}
+	
 	/**
 	 * 
 	 * @param userId
@@ -218,10 +241,11 @@ public class WorkTicketDAO {
 			ResultSet rs = selectUserStatement.executeQuery();
 			while (rs.next()) {
 				return new UserDTO(
-						rs.getString(1), // userName
-						rs.getString(2), // passhash
-						rs.getString(3), // email
-						rs.getString(4)); // name
+						rs.getString(1), 	// userName
+						rs.getString(2), 	// passhash
+						rs.getString(3), 	// email
+						rs.getString(4),	// name
+						rs.getString(5));	//role 
 			}
 		}
 		catch (SQLException e) {
@@ -237,11 +261,12 @@ public class WorkTicketDAO {
 	 */
 	public String saveUser(UserDTO user) {
 		try{
-			if (!user.isNew()) {
+			if (!user.isNewUser()) {
 				updateUserStatement.setString(1, user.getUsername());
 				updateUserStatement.setString(2, user.getPasshash());
 				updateUserStatement.setString(3, user.getEmail());
-				updateUserStatement.setString(4, user.getName());
+				updateUserStatement.setString(4, user.getRole());
+				updateUserStatement.setString(5, user.getName());
 				updateUserStatement.executeUpdate();
 				return user.getUsername();
 			}
@@ -251,6 +276,7 @@ public class WorkTicketDAO {
 				insertUserStatement.setString(2, user.getPasshash());
 				insertUserStatement.setString(3, user.getEmail());
 				insertUserStatement.setString(4, user.getName());
+				insertUserStatement.setString(5, user.getRole());
 				insertUserStatement.executeUpdate();
 				return user.getUsername();
 			}

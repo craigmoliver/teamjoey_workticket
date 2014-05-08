@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 
 import security.PasswordHash;
 import db.UserDTO;
@@ -11,11 +12,12 @@ import db.WorkTicketDAO;
 
 /**
  * 
- * @author craigmoliver
+ * @author TODO
  *
  */
 public class UserHelper {
 	private UserDTO user;
+	private ArrayList<String> allRoles;
 	
 	/**
 	 * 
@@ -25,10 +27,24 @@ public class UserHelper {
 		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
 		UserDTO user = workTicketDAO.loadUser(username);
 		setUser(user);
+		populateAllRoles();
 	}
 	
+	/**
+	 * 
+	 */
 	public UserHelper() {
 		setUser(new UserDTO());
+		populateAllRoles();
+	}	
+	
+	/**
+	 * 
+	 */
+	private void populateAllRoles(){
+		allRoles = new ArrayList<String>();
+		allRoles.add("Worker");
+		allRoles.add("Manager");
 	}
 	
 	/**
@@ -38,7 +54,7 @@ public class UserHelper {
 	 * @param username
 	 * @param password
 	 */
-	public static void saveUser(String name, String email, String username, String password) {
+	public static void saveUser(String name, String email, String username, String password, String role) {
 		try {
 			WorkTicketDAO workTicketDAO = new WorkTicketDAO();
 			UserDTO user = workTicketDAO.loadUser(username);
@@ -46,6 +62,7 @@ public class UserHelper {
 			user.setName(name);
 			user.setUsername(username);
 			user.setPasshash(PasswordHash.createHash(password));
+			user.setRole(role);
 			workTicketDAO.saveUser(user);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -69,4 +86,11 @@ public class UserHelper {
 	public void setUser(UserDTO user) {
 		this.user = user;
 	}	
+	
+	/**
+	 * @return the allRoles
+	 */
+	public ArrayList<String> getAllRoles() {
+		return allRoles;
+	}
 }
