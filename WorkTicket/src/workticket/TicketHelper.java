@@ -82,7 +82,7 @@ public class TicketHelper {
 	 * @param description of ticket
 	 * @returnt ticketId
 	 */
-	public static int newTicket(String title, String description) {
+	public static int saveNewTicket(String title, String description) {
 		// new ticket to save
 		TicketDTO ticket = new TicketDTO();
 		ticket.setDatePosted((GregorianCalendar) Calendar.getInstance()); // Set date to right now
@@ -99,12 +99,29 @@ public class TicketHelper {
 	/**
 	 * 
 	 * @param ticket
-	 * @param assignTo
+	 * @param username
 	 */
-	public static void assignTo(TicketDTO ticket, String assignTo) {
+	public static void assignTicketTo(TicketDTO ticket, String username) {
 		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
-		ticket.setAssignedTo(assignTo);
+		ticket.setAssignedTo(username);
 		workTicketDAO.saveTicket(ticket);
+	}
+	
+	/**
+	 * 
+	 * @param ticketId
+	 * @param username
+	 * @param text
+	 */
+	public static void saveNewAnnotation(int ticketId, String username, String text) {
+		AnnotationDTO annotation = new AnnotationDTO();
+		annotation.setAuthorUsername(username);
+		annotation.setText(text);
+		annotation.setTicketId(ticketId);
+		annotation.setDatePosted((GregorianCalendar) Calendar.getInstance()); // Set date to right now
+		
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		workTicketDAO.saveAnnotation(annotation);
 	}
 	
 	/**

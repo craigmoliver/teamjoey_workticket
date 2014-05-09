@@ -71,10 +71,7 @@
 	    			<tr>
 	    				<th>Posted</th>
 	    				<th>Text</th>
-	    				<c:if test="${isManager}">
-	    					<%--  --%>
-	    					<th>Saved By</th>
-	    				</c:if>
+						<th>Saved By</th>
 	    			</tr>
 	    		</thead>
 	    		<tbody>
@@ -83,10 +80,7 @@
 	    				<tr>
 	    					<td><fmt:formatDate type="both" value="${annotation.datePostedAsDate}" dateStyle="short" timeStyle="short" /></td>
 	    					<td>${annotation.text}</td>
-	    					<c:if test="${isManager}">
-	    						<%-- --%>
-	    						<td>${annotation.authorUsername}</td>
-	    					</c:if>
+	    					<td>${annotation.authorUsername}</td>
 	    				</tr>
 				    </c:forEach>
 	    		</tbody>
@@ -96,25 +90,23 @@
   	</div>
     <div class="container spacer">
 	    <div class="row">
-            <form action="" method="POST" id="annotation" role="form" data-toggle="validator">
+            <form action="/ticket" method="POST" id="annotation" role="form" data-toggle="validator">
 			    <fieldset>
 				    <legend>Add Annotation</legend>
 				    <div class="form-group">
-						<div class="col-sm-12">
-							<textarea class="form-control" rows="3" required></textarea>
+						<div class="col-lg-12">
+							<textarea name="text" id="input-annotation-text" class="form-control" rows="3" required></textarea>
 							<p class="help-block with-errors"></p>
 						</div>
 					</div>
 					
 				    <div class="form-group">
-				    	<div class="col-sm-12">
-				    		<button type="submit" class="btn btn-primary">Save</button>
+				    	<div class="col-lg-12">
+				    		<button type="submit" class="btn btn-primary">Add</button>
 				    	</div>
 			    	</div>
-			    	
 			    	<input type="hidden" name="ticketId" value="${ticketHelper.ticket.ticketId}" />
 			    	<input type="hidden" name="command" value="annotation_save" />
-			    	
 			    </fieldset>
 		    </form>
 	    </div>

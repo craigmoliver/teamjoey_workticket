@@ -140,15 +140,15 @@ public class TicketController extends HttpServlet {
 	    System.out.println(!redirect.equals(""));
 		System.out.println("NotFound:"+notFound);
 		
-		if (!redirect.equals("")) { // Redirect if redirect is set
+		if (!redirect.isEmpty()) { // Redirect if redirect is set
 			response.sendRedirect(redirect);
 			return;
 		}
-		if (notFound) { //TODO
-			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
+		if (notFound) { // displays not found page
+			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); 
 		}
-		if (notAuthorized) { // TODO
-			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp"); //not authorized
+		if (notAuthorized) { // displays not authorized
+			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp");
 		}
 		
 		// set for all valid requests
@@ -175,55 +175,79 @@ public class TicketController extends HttpServlet {
 		// TODO
 		Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
 	    Boolean loggedIn = userTicket != null;
-		
-		if (command.equals("user_login")) { //TODO
-			
-		}
-		else if (command.equals("user_save")) { //TODO
-			UserHelper.saveUser(request.getParameter("name"), 
-								request.getParameter("email"), 
-								request.getParameter("username"), 
-								request.getParameter("password"), 
-								request.getParameter("role"));
-			redirect = "/ticket?command=user_list";
-		}
-		else if (command.equals("ticket_assign")) { //TODO
-			TicketHelper ticketHelper = new TicketHelper(Integer.parseInt(request.getParameter("ticketId")));
-			String paramAssignTo = request.getParameter("assignTo");
-			
-			// ticketId will be greater than zero if exists and user should exist
-			if (ticketHelper.getTicket().getTicketId() > 0 && UserHelper.userExists(paramAssignTo)) { 
-				TicketHelper.assignTo(ticketHelper.getTicket(), paramAssignTo);
-				redirect = "/ticket?command=ticket_view&ticketId=" + ticketHelper.getTicket().getTicketId();
-			}
-			else { 
-				notFound = true;
-			}
-		}
-		else if (command.equals("ticket_submit")) {
+	    
+	    if (command.equals("ticket_submit")) { // Saves a new Ticket
 			String attrTitle = request.getParameter("title");
 			String attrDescription = request.getParameter("description");
 			if (!attrTitle.isEmpty() && !attrDescription.isEmpty()) { // save if new ticket description and title aren't empty
-				int ticketId = TicketHelper.newTicket(attrTitle, attrDescription);
+				int ticketId = TicketHelper.saveNewTicket(attrTitle, attrDescription);
 				redirect = "/ticket?command=ticket_confirm&ticketId=" + ticketId; // redirect to ticket confirmation
 			}
-			
-			
+	    }
+	    else if (command.equals("annotation_save")) { // Saves an Annotation
+	    	if (loggedIn) { // Must be logged in
+				String attrTicketId = request.getParameter("ticketId");
+				String username = userTicket.getUsername();
+				String attrText = request.getParameter("text");
+				TicketHelper.saveNewAnnotation(Integer.parseInt(attrTicketId), username, attrText);
+				// redirect back to Ticket details
+				redirect = "/ticket?command=ticket_view&ticketId=" + attrTicketId; 
+	    	}
+	    	else { // Not Authorized
+	    		notAuthorized = true;
+	    	}
 		}
-		
+	    else if (command.equals("user_save")) { // Saves an User
+	    	if (loggedIn && isManager) { // Must be logged in and a manager
+				String attrName = request.getParameter("name");
+	    		String attrEmail = request.getParameter("email");
+				String attrUsername = request.getParameter("username");
+				String attrPassword = request.getParameter("password");
+				String attrRole = request.getParameter("role");
+	    		
+				// Input parameters must not be empty
+				if (!attrName.isEmpty() && !attrEmail.isEmpty() && !attrUsername.isEmpty() && 
+					!attrPassword.isEmpty() && !attrRole.isEmpty()) {
+					UserHelper.saveUser(attrName, attrEmail, attrUsername, attrPassword, attrRole);
+					redirect = "/ticket?command=user_list"; // redirect back to list of Users
+				}
+	    	}
+	    	else { // Not Authorized
+	    		notAuthorized = true;	
+	    	}
+	    }
+	    else if (command.equals("ticket_assign")) { // Assigns ticket to worker or manager
+	    	if (loggedIn && isManager) { // Must be logged in and a manager
+	    		TicketHelper ticketHelper = new TicketHelper(Integer.parseInt(request.getParameter("ticketId")));
+				String paramAssignTo = request.getParameter("assignTo");
+				
+				// ticketId will be greater than zero if exists and user should exist
+				if (ticketHelper.getTicket().getTicketId() > 0 && UserHelper.userExists(paramAssignTo)) { 
+					TicketHelper.assignTicketTo(ticketHelper.getTicket(), paramAssignTo);
+					// redirect back to Ticket details
+					redirect = "/ticket?command=ticket_view&ticketId=" + ticketHelper.getTicket().getTicketId(); 
+				}
+				else { // Not Found
+					notFound = true;
+				}
+	    	}
+	    	else { // Not Authorized
+	    		notAuthorized = true;	
+	    	}
+	    }
+	    		
 		System.out.println("Redirect:"+redirect);
-	    System.out.println(!redirect.equals(""));
 		System.out.println("NotFound:"+notFound);
 		
 		if (!redirect.isEmpty()) { // Redirect if redirect is set
 			response.sendRedirect(redirect);
 			return;
 		}
-		if (notFound) { //TODO
-			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
+		if (notFound) { // displays not found page
+			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); 
 		}
-		if (notAuthorized) { // TODO
-			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp"); //not authorized
+		if (notAuthorized) { // displays not authorized
+			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp");
 		}
 		
 		// set for all valid requests

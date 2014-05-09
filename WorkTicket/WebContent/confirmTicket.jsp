@@ -11,7 +11,7 @@
 	<jsp:include page="includes/navigation.jsp" />
     <div class="container spacer">
 	    <div class="row">
-	    	<div class="col-sm-offset-3 col-lg-6">
+	    	<div class="col-lg-offset-3 col-lg-6">
 	    		<div class="bg-success">
             		<h2>Thank you for your submission.</h2>
             		<p>Your Ticket ID # is ${ticketId}. Someone from our semi-courteous staff will get back to you shortly.</p>
