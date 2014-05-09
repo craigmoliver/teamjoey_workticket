@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -58,19 +59,19 @@ public class WorkTicketDAO {
 			selectAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE annotationId = ?");
 			selectAllAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation ORDER BY datePosted DESC");
 			updateAnnotationStatement = conn.prepareStatement("UPDATE annotation SET ticketId = ?, authorUsername = ?, text = ?, datePosted = ? WHERE annotationId = ?");
-			insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)");
+			insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE ticketId = ? ORDER BY datePosted DESC");
 			
 			selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE ticketId = ?");
 			selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket ORDER BY datePosted ASC");
 			selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
 			updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ? WHERE ticketId = ?");
-			insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)");
+			insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			
 			selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
 			selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
-			updateUserStatement = conn.prepareStatement("UPDATE user SET username = ?, passHash = ?, email = ?, name = ?, role = ? WHERE username = ?");
-			insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name, role) VALUES(?, ?, ?, ?, ?)");
+			updateUserStatement = conn.prepareStatement("UPDATE user SET passHash = ?, email = ?, name = ?, role = ? WHERE username = ?");
+			insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name, role) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			
 			// SQL to query the database.
 		} catch (Exception e) {
@@ -351,11 +352,11 @@ public class WorkTicketDAO {
 	public String saveUser(UserDTO user) {
 		try{
 			if (!user.isNewUser()) {
-				updateUserStatement.setString(1, user.getUsername());
-				updateUserStatement.setString(2, user.getPasshash());
-				updateUserStatement.setString(3, user.getEmail());
+				updateUserStatement.setString(1, user.getPasshash());
+				updateUserStatement.setString(2, user.getEmail());
+				updateUserStatement.setString(3, user.getName());
 				updateUserStatement.setString(4, user.getRole());
-				updateUserStatement.setString(5, user.getName());
+				updateUserStatement.setString(5, user.getUsername());
 				updateUserStatement.executeUpdate();
 				return user.getUsername();
 			}

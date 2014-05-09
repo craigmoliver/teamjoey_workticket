@@ -40,11 +40,14 @@ public class TicketController extends HttpServlet {
 		Boolean notFound = false;
 		Boolean notAuthorized = false;
 		UserDTO userTicket = UserTicket.getUserTicket(session);
-	    
-		if (userTicket != null){
+		
+		// TODO
+	    Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+		
+		if (loggedIn){
 			if (command == null){ //initial request
-				
-				if (userTicket.getRole().equals("Manager")) { // TODO
+				if (isManager) { // TODO
 					request.setAttribute("title", "All Tickets (Manager View)");
 			    	request.setAttribute("formheader", "Tickets");
 			    	request.setAttribute("tickets", TicketHelper.listTickets());
@@ -57,7 +60,7 @@ public class TicketController extends HttpServlet {
 				dispatcher = ctx.getRequestDispatcher("/listTicket.jsp");
 		    }
 			else if (command.equals("user_list")) { // TODO
-				if (userTicket.getRole().equals("Manager")) {
+				if (isManager) {
 					request.setAttribute("users", new WorkTicketDAO().listUsers());
 			    	request.setAttribute("title", "Users");
 			    	dispatcher = ctx.getRequestDispatcher("/listUsers.jsp");
@@ -67,7 +70,7 @@ public class TicketController extends HttpServlet {
 		    	}
 		    }
 		    else if (command.equals("user_new")) { // TODO
-		    	if (userTicket.getRole().equals("Manager")) {
+		    	if (isManager) {
 		    		UserHelper userHelper = new UserHelper();
 			    	request.setAttribute("title", "Users");
 			    	request.setAttribute("formheader", "New");
@@ -79,7 +82,7 @@ public class TicketController extends HttpServlet {
 		    	}
 		    }
 		    else if (command.equals("user_edit")) { // TODO
-				if (userTicket.getRole().equals("Manager")) {
+				if (isManager) {
 					String paramUsername = request.getParameter("username");
 					if (paramUsername != null) {
 						UserHelper userHelper = new UserHelper(paramUsername);
@@ -109,7 +112,6 @@ public class TicketController extends HttpServlet {
 		    		request.setAttribute("title", "View Ticket");
 			    	request.setAttribute("formheader", "Ticket");
 			    	request.setAttribute("ticketHelper", ticketHelper);
-			    	request.setAttribute("isManager", userTicket.getRole().equals("Manager"));
 			    	request.setAttribute("userTicket", userTicket);
 			    	dispatcher = ctx.getRequestDispatcher("/viewTicket.jsp");
 		    	}
@@ -120,7 +122,16 @@ public class TicketController extends HttpServlet {
 		    }
 		}
 		else {
-			redirect = "/login";
+			if (command == null) { // Default to Ticket Submit
+				dispatcher = ctx.getRequestDispatcher("/submitTicket.jsp");
+			}
+			else if (command.equals("ticket_confirm")) { // Ticket Confirmation
+				request.setAttribute("ticketId", request.getParameter("ticketId"));
+				dispatcher = ctx.getRequestDispatcher("/confirmTicket.jsp");
+			}
+			else { // Anything else redirect to login
+				redirect = "/login";
+			}
 		}
 		
 		
@@ -139,7 +150,11 @@ public class TicketController extends HttpServlet {
 		if (notAuthorized) { // TODO
 			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp"); //not authorized
 		}
-	    	
+		
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);
+    	
 	    dispatcher.forward(request,response);
 	}
 
@@ -157,6 +172,10 @@ public class TicketController extends HttpServlet {
 		Boolean notAuthorized = false;
 		UserDTO userTicket = UserTicket.getUserTicket(session);
 		
+		// TODO
+		Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+		
 		if (command.equals("user_login")) { //TODO
 			
 		}
@@ -166,7 +185,7 @@ public class TicketController extends HttpServlet {
 								request.getParameter("username"), 
 								request.getParameter("password"), 
 								request.getParameter("role"));
-			dispatcher = ctx.getRequestDispatcher("/listUsers.jsp");
+			redirect = "/ticket?command=user_list";
 		}
 		else if (command.equals("ticket_assign")) { //TODO
 			TicketHelper ticketHelper = new TicketHelper(Integer.parseInt(request.getParameter("ticketId")));
@@ -180,6 +199,16 @@ public class TicketController extends HttpServlet {
 			else { 
 				notFound = true;
 			}
+		}
+		else if (command.equals("ticket_submit")) {
+			String attrTitle = request.getParameter("title");
+			String attrDescription = request.getParameter("description");
+			if (!attrTitle.isEmpty() && !attrDescription.isEmpty()) { // save if new ticket description and title aren't empty
+				int ticketId = TicketHelper.newTicket(attrTitle, attrDescription);
+				redirect = "/ticket?command=ticket_confirm&ticketId=" + ticketId; // redirect to ticket confirmation
+			}
+			
+			
 		}
 		
 		System.out.println("Redirect:"+redirect);
@@ -197,7 +226,9 @@ public class TicketController extends HttpServlet {
 			dispatcher = ctx.getRequestDispatcher("/notAuthorized.jsp"); //not authorized
 		}
 		
-		
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);
 		
 		dispatcher.forward(request,response);
 	}

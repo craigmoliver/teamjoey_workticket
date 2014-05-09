@@ -7,16 +7,15 @@
 	<%@ include file="includes/head.html" %>
 </head>
 <body>
-	<%@ include file="includes/navigation.html" %>
+	<jsp:include page="includes/navigation.jsp" />
 	<div class="container">
 		<div class="row">
 			<h2>${title}</h2>
-			<p><a href="/WorkTicket?command=user_new" class="btn btn-primary btn-sm">New</a></p>
+			<p><a href="/ticket?command=user_new" class="btn btn-primary btn-sm">New</a></p>
 			<div class="table-responsive">
 				<table class="table table-hover table-condensed">
 					<thead>
 						<tr>
-							<th>&nbsp;</th>
 							<th>Username</th>
 							<th>Name</th>
 							<th>Email</th>
@@ -27,10 +26,7 @@
 						<c:forEach items="${users}" var="user" varStatus="status">
 							<%-- Emit a row containing TODO --%>
 							<tr>
-								<td>
-			     					<a href="/WorkTicket?command=user_edit&username=${user.username}" class="btn btn-primary btn-sm">Edit</a>
-			     				</td>
-								<td>${user.username}</td>
+								<td><a href="/ticket?command=user_edit&username=${user.username}" class="btn btn-link">${user.username}</a></td>
 								<td>${user.name}</td>
 								<td>${user.email}</td>
 								<td>${user.role}</td>

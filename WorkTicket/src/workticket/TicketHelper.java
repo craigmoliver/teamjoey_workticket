@@ -4,6 +4,8 @@
 package workticket;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import db.TicketDTO;
 import db.AnnotationDTO;
@@ -72,6 +74,26 @@ public class TicketHelper {
 			tickets.add(new TicketHelper(ticketDTO.getTicketId()));
 		}
 		return tickets;
+	}
+	
+	/**
+	 * Creates new ticket and returns its ticketId
+	 * @param title of ticket
+	 * @param description of ticket
+	 * @returnt ticketId
+	 */
+	public static int newTicket(String title, String description) {
+		// new ticket to save
+		TicketDTO ticket = new TicketDTO();
+		ticket.setDatePosted((GregorianCalendar) Calendar.getInstance()); // Set date to right now
+		ticket.setDescription(description);
+		ticket.setTitle(title);
+		ticket.setAssignedTo("");
+		
+		// save to database and return ticketId
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		int ticketId = workTicketDAO.saveTicket(ticket);
+		return ticketId;
 	}
 	
 	/**

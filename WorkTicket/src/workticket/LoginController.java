@@ -44,8 +44,12 @@ public class LoginController extends HttpServlet {
 		Boolean notFound = false;
 	    dispatcher = ctx.getRequestDispatcher("/login.jsp"); // default view
 	    
+	    // TODO
+	    Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+	    
 		if (command == null) { // TODO
-	    	if (userTicket != null) { // TODO
+	    	if (loggedIn) { // TODO
 	    		redirect = loginSuccessUrl;
 	    	}
 	    }
@@ -68,6 +72,10 @@ public class LoginController extends HttpServlet {
 			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
 		}
 
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);
+		
 	    dispatcher.forward(request,response);
 	}
 
@@ -86,8 +94,13 @@ public class LoginController extends HttpServlet {
 		Boolean notFound = false;
 		dispatcher = ctx.getRequestDispatcher("/login.jsp"); // default view
 		
+		// TODO
+		Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+		
+		
 		if (command == null) { // TODO
-			if (userTicket != null) { // TODO
+			if (loggedIn) { // TODO
 				redirect = loginSuccessUrl;
 	    	}
 			else {
@@ -95,7 +108,7 @@ public class LoginController extends HttpServlet {
 			}
 		}
 		else if (command.equals("user_login")) {
-			if (userTicket != null) { // TODO
+			if (loggedIn) { // TODO
 				redirect = loginSuccessUrl;
 	    	}
 			else { // TODO
@@ -125,7 +138,11 @@ public class LoginController extends HttpServlet {
 		if (notFound) { //TODO
 			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
 		}
-
+		
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);		
+		
 		dispatcher.forward(request,response);
 	}
 

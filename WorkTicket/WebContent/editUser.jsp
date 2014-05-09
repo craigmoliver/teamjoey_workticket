@@ -7,12 +7,11 @@
 	<%@ include file="includes/head.html" %>
 </head>
 <body>
-	<%@ include file="includes/navigation.html" %>
-
+	<jsp:include page="includes/navigation.jsp" />
     <div class="container">
 	    <div class="row">
 	    	<h2>${title}</h2>
-            <form action="" method="POST" id="user" role="form" data-toggle="validator">
+            <form action="/ticket" method="POST" id="user" role="form" data-toggle="validator">
 			    <fieldset>
 				    <legend>${formheader}</legend>
 				    <div class="form-group">

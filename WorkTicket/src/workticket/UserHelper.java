@@ -59,6 +59,7 @@ public class UserHelper {
 	 * @param email
 	 * @param username
 	 * @param password
+	 * @param role
 	 */
 	public static void saveUser(String name, String email, String username, String password, String role) {
 		try {
@@ -67,7 +68,10 @@ public class UserHelper {
 			user.setEmail(email);
 			user.setName(name);
 			user.setUsername(username);
-			if ((password.length() > 0 && user.isNewUser()) || !user.isNewUser()) { // update if set, save if new
+			
+			// update if set, save if new
+			if ((!user.isNewUser() && !password.isEmpty()) || 
+				 user.isNewUser()) { 
 				user.setPasshash(PasswordHash.createHash(password));
 			}
 			user.setRole(role);
