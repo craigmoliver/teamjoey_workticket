@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.JUnit4;
 
+import db.TicketDTO;
 import bands.Band;
 import bands.DBHelper;
 /**
@@ -64,43 +65,20 @@ public class TicketHelperTest extends TestCase {
 	}
 	
 	
-	/**adds a couple of bands and gets the band list to verify that the band is present */
+	/**Tests saving a new ticket */
 	@Test
-	public void testAddBand() throws Exception{
+	public void testSaveNewTicket() throws Exception{
 		try {
-		DBHelper instance2 = new DBHelper(); 
-		instance2.setBandName("Peach Fuzz");
-		instance2.setBandName("Peach Cobbler");
-		instance2.setBandName("Peach Trees");
-		ArrayList<Band> bandList=instance2.getBandList();
-		//System.out.println("Bands on the list "+ instance2.getBandList()); not readable but shows all three albums exist
-		assertEquals("The number of bands ",3,bandList.size());
-		//assertTrue - bands are on list 
+		TicketHelper instance2 = new TicketHelper(0); 
+		TicketHelper.saveNewTicket("Broken Macbook", "My Macbook is on fire");
+		TicketDTO TicketHelper=instance2.getTicket();
 		}
 		catch(SQLException sqle){
-			System.out.println("Exception in testAddBand: "+sqle.getMessage());
+			System.out.println("Exception in saveNewTicket: "+sqle.getMessage());
 		}
-		
-	}
-	/**adds a couple of bands and albums and gets the band list to verify that the bands and albums are present */
-	@Test
-	public void testAddAlbum() throws Exception{
-		try {
-		DBHelper instance3 = new DBHelper();
-		instance3.setBandName("Hellions Mercy");
-		instance3.setBandName("Creed Fury");
-		instance3.setBandName("Lions Maine");
-		instance3.setAlbumName(1,"Tap Dancing Monkeys");
-		instance3.setAlbumName(1,"High Flying Eagles");
-		instance3.setAlbumName(1,"Low Down Frogs");
-		ArrayList<Band> bandList=instance3.getBandList();
-		//System.out.println("Albums for band with ID of 1 "  getAlbumsforBandStatement.setInt(1, 1));
-		assertEquals("The number of bands ",3,bandList.size());
-		//assertEquals("The number of albums created ",3,count(instance3.getAlbumsforBandStatement.setInt(1, 1)));
-		}
-		catch(SQLException sqle){
-			System.out.println("Exception in testAddBand: "+sqle.getMessage());
-		}
-		
 	}
 }
+
+		
+
+
