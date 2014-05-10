@@ -15,8 +15,7 @@ import org.junit.Test;
 import org.junit.runners.JUnit4;
 
 import db.TicketDTO;
-import bands.Band;
-import bands.DBHelper;
+
 /**
  * Test of the TicketHelper object.
  * @author Team Joey
@@ -50,17 +49,12 @@ public class TicketHelperTest extends TestCase {
 	@Test
 	public void testConstructor()throws Exception {
 		 
-			try {
-				TicketHelper instance1 = new TicketHelper(0);
-				assertTrue(instance1.getAnnotations() !=null);
-				assertTrue(instance1.getHasAnnotations() !=null);
-				assertTrue(instance1.getLatestAnnotation() !=null);
-				assertTrue(instance1.getTicket() !=null);
-				assertTrue(instance1.getUsers() !=null);
-			}
-			catch (SQLException sqle){
-				System.out.println("exception in setup: "+ sqle.getMessage());
-			}
+			TicketHelper instance1 = new TicketHelper(0);
+			assertTrue(instance1.getAnnotations() !=null);
+			assertTrue(instance1.getHasAnnotations() !=null);
+			assertTrue(instance1.getLatestAnnotation() !=null);
+			assertTrue(instance1.getTicket() !=null);
+			assertTrue(instance1.getUsers() !=null);
 		
 	}
 	
@@ -68,14 +62,9 @@ public class TicketHelperTest extends TestCase {
 	/**Tests saving a new ticket */
 	@Test
 	public void testSaveNewTicket() throws Exception{
-		try {
 		TicketHelper instance2 = new TicketHelper(0); 
 		TicketHelper.saveNewTicket("Broken Macbook", "My Macbook is on fire");
 		TicketDTO TicketHelper=instance2.getTicket();
-		}
-		catch(SQLException sqle){
-			System.out.println("Exception in saveNewTicket: "+sqle.getMessage());
-		}
 	}
 }
 
