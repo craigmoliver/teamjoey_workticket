@@ -1,6 +1,3 @@
-/**
- * 
- */
 package workticket;
 
 import java.util.ArrayList;
@@ -13,7 +10,8 @@ import db.WorkTicketDAO;
 import db.UserDTO;
 
 /**
- * @author 
+ * Opens a connection to the db and initializes all PrepareStatements used by the TicketController.
+ * @author TeamJoey
  *
  */
 public class TicketHelper {
@@ -24,7 +22,7 @@ public class TicketHelper {
 	private ArrayList<String> users;
 	
 	/**
-	 * 
+	 * Verifies annotations on a specific ticket ID#.
 	 * @param ticketId
 	 */
 	public TicketHelper(int ticketId) {
@@ -50,7 +48,7 @@ public class TicketHelper {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of work tickets.
 	 * @return
 	 */
 	public static ArrayList<TicketHelper> listTickets() {
@@ -63,7 +61,7 @@ public class TicketHelper {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of tickets assigned to a specific user.
 	 * @param assignedTo
 	 * @return
 	 */
@@ -77,10 +75,10 @@ public class TicketHelper {
 	}
 	
 	/**
-	 * Creates new ticket and returns its ticketId
+	 * Creates new ticket and returns its ticket ID#.
 	 * @param title of ticket
 	 * @param description of ticket
-	 * @returnt ticketId
+	 * @return ticketId
 	 */
 	public static int saveNewTicket(String title, String description) {
 		// new ticket to save
@@ -97,7 +95,7 @@ public class TicketHelper {
 	}
 	
 	/**
-	 * 
+	 * Loads the object ticket and username from the db.
 	 * @param ticket
 	 * @param username
 	 */
@@ -108,7 +106,7 @@ public class TicketHelper {
 	}
 	
 	/**
-	 * 
+	 * Saves a new annotation with ticket ID#, username, and text.
 	 * @param ticketId
 	 * @param username
 	 * @param text
@@ -125,36 +123,42 @@ public class TicketHelper {
 	}
 	
 	/**
+	 * Returns a work ticket.
 	 * @return the ticket
 	 */
 	public TicketDTO getTicket() {
 		return ticket;
 	}
 	/**
+	 * Sets a work ticket.
 	 * @param ticket the ticket to set
 	 */
 	public void setTicket(TicketDTO ticket) {
 		this.ticket = ticket;
 	}
 	/**
-	 * @return the lastestAnnotation
+	 * Returns the last added annotation by date.
+	 * @return the latestAnnotation
 	 */
 	public AnnotationDTO getLatestAnnotation() {
 		return latestAnnotation;
 	}
 	/**
+	 * Sets the last added annotation by date.
 	 * @param latestAnnotation the lastestAnnotation to set
 	 */
 	public void setLastestAnnotation(AnnotationDTO latestAnnotation) {
 		this.latestAnnotation = latestAnnotation;
 	}
 	/**
+	 * Returns a list of annotations.
 	 * @return the annotations
 	 */
 	public ArrayList<AnnotationDTO> getAnnotations() {
 		return annotations;
 	}
 	/**
+	 * Sets a list of annotations.
 	 * @param annotations the annotations to set
 	 */
 	public void setAnnotations(ArrayList<AnnotationDTO> annotations) {
@@ -162,13 +166,14 @@ public class TicketHelper {
 	}
 
 	/**
+	 * Verifies that a work ticket has annotations.
 	 * @return the hasAnnotations
 	 */
 	public Boolean getHasAnnotations() {
 		return hasAnnotations;
 	}
 
-	/**
+	/** Loads annotations from db
 	 * @param hasAnnotations the hasAnnotations to set
 	 */
 	public void setHasAnnotations(Boolean hasAnnotations) {
@@ -176,6 +181,7 @@ public class TicketHelper {
 	}
 
 	/**
+	 * Returns a list of users.
 	 * @return the users
 	 */
 	public ArrayList<String> getUsers() {
@@ -183,6 +189,7 @@ public class TicketHelper {
 	}
 
 	/**
+	 * Adds a user to the user list.
 	 * @param users the users to set
 	 */
 	public void setUsers(ArrayList<String> users) {
