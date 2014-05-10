@@ -1,15 +1,15 @@
-/**
- * another try
- */
 package db;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.text.DateFormat;
 
 /**
  * Annotation class - Creates an annotation object with an id, 
- * ticket ID Author name, and annotation text
+ * ticket ID Author name, annotation text, and date posted
  * @author TeamJoey
  *
  */
@@ -43,6 +43,7 @@ public class AnnotationDTO {
 		setTicketId(ticketId);
 		setAuthorUsername(authorName);
 		setText(text);
+		//setAnnoDate(datePosted);
 		// setup calendar for datePosted
 		GregorianCalendar calDatePosted = new GregorianCalendar();
 		calDatePosted.setTime(datePosted);
@@ -116,6 +117,8 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Retrieves the date of when the Annotation
+	 * was posted
 	 * @return the datePosted
 	 */
 	public GregorianCalendar getDatePosted() {
@@ -123,11 +126,40 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Sets the date of the when the Annotation 
+	 * was posted
 	 * @param datePosted the datePosted to set
 	 */
 	public void setDatePosted(GregorianCalendar datePosted) {
 		this.datePosted = datePosted;
 	}
 	
+	/** DATE variables for converting and testing */
+		//public String dateOut;
+		//public DateFormat dateFormatter;
+		//Date annoDate;
+		
+	/** Set Annotation Date based on Date Posted/
+		public void setAnnoDate(Date datePosted){
+			this.annoDate = datePosted;	
+		}
+	/** Retrieves Annotation Date based on Date Posted/
+		public Date getAnnoDate(){
+			return annoDate;	
+		}	*/
+		
 	
+	/** Formats dates to strings and shows just the date/
+	public String shortForm(Date annoDate){
+		dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
+		dateOut = dateFormatter.format(annoDate);
+		return dateOut;
+	}
+	
+	/** Formats dates to strings and shows just the date/
+	public String shortForm(Date annoDate){
+		SimpleDateFormat ft = new SimpleDateFormat ("yyyy.MM.dd");
+		dateOut = ft.format(annoDate);
+		return dateOut;
+		}*/
 }
