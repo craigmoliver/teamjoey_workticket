@@ -38,15 +38,14 @@ public class AnnotationDTO {
 	 * Create an annotation object
 	 * @param annotationId
 	 */
-	public AnnotationDTO(int annotationId, int ticketId, String authorName, String text, Date datePosted) {
+	public AnnotationDTO(int annotationId, int ticketId, String authorName, String text, Date annoDate) {
 		setAnnotationId(annotationId);
 		setTicketId(ticketId);
 		setAuthorUsername(authorName);
 		setText(text);
-		//setAnnoDate(datePosted);
 		// setup calendar for datePosted
 		GregorianCalendar calDatePosted = new GregorianCalendar();
-		calDatePosted.setTime(datePosted);
+		calDatePosted.setTime(annoDate);
 		setDatePosted(calDatePosted);
 	}
 	
@@ -133,33 +132,5 @@ public class AnnotationDTO {
 	public void setDatePosted(GregorianCalendar datePosted) {
 		this.datePosted = datePosted;
 	}
-	
-	/** DATE variables for converting and testing */
-		//public String dateOut;
-		//public DateFormat dateFormatter;
-		//Date annoDate;
-		
-	/** Set Annotation Date based on Date Posted/
-		public void setAnnoDate(Date datePosted){
-			this.annoDate = datePosted;	
-		}
-	/** Retrieves Annotation Date based on Date Posted/
-		public Date getAnnoDate(){
-			return annoDate;	
-		}	*/
-		
-	
-	/** Formats dates to strings and shows just the date/
-	public String shortForm(Date annoDate){
-		dateFormatter = DateFormat.getDateInstance(DateFormat.SHORT);
-		dateOut = dateFormatter.format(annoDate);
-		return dateOut;
-	}
-	
-	/** Formats dates to strings and shows just the date/
-	public String shortForm(Date annoDate){
-		SimpleDateFormat ft = new SimpleDateFormat ("yyyy.MM.dd");
-		dateOut = ft.format(annoDate);
-		return dateOut;
-		}*/
+
 }

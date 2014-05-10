@@ -34,20 +34,24 @@ public class AnnotationDTOTest {
 		assertTrue(instance1.getDatePosted() !=null);
 
 		
-		/** Test all parameters being set /
-		AnnotationDTO instance2 = new AnnotationDTO(143, 33, "Bill Williams", "Lord help us, we have a Macbook Air on fire", "");
-		instance2.setDatePosted(new GregorianCalendar(2014, 05, 15));
+		/** Test all parameters being set */
+			// Need an SQL date for date parameter
+			Date tempDate = new Date();
+			long longTime = tempDate.getTime();
+			java.sql.Date instDatePost = new java.sql.Date(longTime);
+			//End of temp parameter creation
+		AnnotationDTO instance2 = new AnnotationDTO(143, 33, "Bill Williams", "Lord help us, we have a Macbook Air on fire", instDatePost);
 		assertEquals("Annotation ID",143,instance2.getAnnotationId());
 		assertEquals("Annotation's Ticket ID",33,instance2.getTicketId());
 		assertEquals("Annotation Author Name","Bill Williams",instance2.getAuthorUsername());
 		assertEquals("Annotation's Text","Lord help us, we have a Macbook Air on fire",instance2.getText());
-		//instance2.setDatePosted(new GregorianCalendar(2014, 05, 15));
 		GregorianCalendar testDatePosted = instance2.getDatePosted();
 		Date endDate = testDatePosted.getTime();
 		SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
+		//System.out.println("Post Date is " + testDatePosted.getTime());//bug testing
 		//System.out.println("Post Date is " + ft.format(endDate));//bug testing
-		assertEquals("Annotation's Date Posted","2014-05-15",ft.format(endDate));
-		*/
+		assertEquals("Annotation's Date Posted","2014-05-10",ft.format(endDate));//Put in current date for it to pass uses the Temp param above
+
 	}
 
 	/**Test that the set annotation ID method works */
