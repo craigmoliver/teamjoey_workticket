@@ -1,5 +1,5 @@
 /**
- * CRAIG IS THE SHIZZNIT
+ * another try
  */
 package db;
 
@@ -8,9 +8,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
+ * Annotation class - Creates an annotation object with an id, 
+ * ticket ID Author name, and annotation text
  * @author TeamJoey
  *
  */
+
+/** Initializing all the basics of an annotation*/
 public class AnnotationDTO {
 	private int annotationId;
 	private int ticketId;
@@ -19,7 +23,8 @@ public class AnnotationDTO {
 	private GregorianCalendar datePosted;
 	
 	/**
-	 * 
+	 * Creates a default annotation object
+	 * and set the parameters to the defaults
 	 */
 	public AnnotationDTO() {
 		setAnnotationId(0);
@@ -30,7 +35,7 @@ public class AnnotationDTO {
 	}
 	
 	/**
-	 * 
+	 * Create an annotation object
 	 * @param annotationId
 	 */
 	public AnnotationDTO(int annotationId, int ticketId, String authorName, String text, Date datePosted) {
@@ -45,20 +50,14 @@ public class AnnotationDTO {
 	}
 	
 	/**
-	 * Returns datePosted as java.util.Date
-	 * @return 
-	 */
-	public java.util.Date getDatePostedAsDate() {
-		return this.datePosted.getTime();
-	}
-	
-	/**
+	 * Retrieves the annotation ID
 	 * @return the annotationId
 	 */
 	public int getAnnotationId() {
 		return annotationId;
 	}
 	/**
+	 * Sets the annotation ID
 	 * @param ticketId the ticketId to set
 	 */
 	public void setAnnotationId(int annotationId) {
@@ -66,6 +65,7 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Retrieves the Ticket ID
 	 * @return the ticketId
 	 */
 	public int getTicketId() {
@@ -73,6 +73,8 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Sets the ticketID of the annotation 
+	 * to the ticket it is associated with
 	 * @param ticketId the ticketId to set
 	 */
 	public void setTicketId(int ticketId) {
@@ -80,6 +82,8 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Retrieves the name of the user that is 
+	 * creating the annotation
 	 * @return the authorName
 	 */
 	public String getAuthorUsername() {
@@ -87,6 +91,8 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Sets the author name of the annotation object to the
+	 * provided author name
 	 * @param authorName the authorName to set
 	 */
 	public void setAuthorUsername(String authorUsername) {
@@ -94,6 +100,7 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Retrieves the current text entered
 	 * @return the text
 	 */
 	public String getText() {
@@ -101,6 +108,7 @@ public class AnnotationDTO {
 	}
 
 	/**
+	 * Sets the text field to the text provided
 	 * @param text the text to set
 	 */
 	public void setText(String text) {
