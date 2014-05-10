@@ -4,6 +4,8 @@
 package workticket;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import db.TicketDTO;
 import db.AnnotationDTO;
@@ -75,14 +77,51 @@ public class TicketHelper {
 	}
 	
 	/**
+	 * Creates new ticket and returns its ticketId
+	 * @param title of ticket
+	 * @param description of ticket
+	 * @returnt ticketId
+	 */
+	public static int saveNewTicket(String title, String description) {
+		// new ticket to save
+		TicketDTO ticket = new TicketDTO();
+		ticket.setDatePosted((GregorianCalendar) Calendar.getInstance()); // Set date to right now
+		ticket.setDescription(description);
+		ticket.setTitle(title);
+		ticket.setAssignedTo("");
+		
+		// save to database and return ticketId
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		int ticketId = workTicketDAO.saveTicket(ticket);
+		return ticketId;
+	}
+	
+	/**
 	 * 
 	 * @param ticket
-	 * @param assignTo
+	 * @param username
 	 */
-	public static void assignTo(TicketDTO ticket, String assignTo) {
+	public static void assignTicketTo(TicketDTO ticket, String username) {
 		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
-		ticket.setAssignedTo(assignTo);
+		ticket.setAssignedTo(username);
 		workTicketDAO.saveTicket(ticket);
+	}
+	
+	/**
+	 * 
+	 * @param ticketId
+	 * @param username
+	 * @param text
+	 */
+	public static void saveNewAnnotation(int ticketId, String username, String text) {
+		AnnotationDTO annotation = new AnnotationDTO();
+		annotation.setAuthorUsername(username);
+		annotation.setText(text);
+		annotation.setTicketId(ticketId);
+		annotation.setDatePosted((GregorianCalendar) Calendar.getInstance()); // Set date to right now
+		
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		workTicketDAO.saveAnnotation(annotation);
 	}
 	
 	/**

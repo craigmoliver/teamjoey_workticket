@@ -8,7 +8,7 @@
 	<%@ include file="includes/head.html" %>
 </head>
 <body>
-	<%@ include file="includes/navigation.html" %>
+	<jsp:include page="includes/navigation.jsp" />
 	<div class="container">
 		<div class="row">
 			<h2>${formheader}</h2>

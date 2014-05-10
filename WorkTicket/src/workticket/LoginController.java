@@ -17,9 +17,6 @@ import db.UserDTO;
  */
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     
-	private static final String loginSuccessUrl = "/ticket";
-	private static final String logoutSuccessUrl = "/ticket";
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -44,14 +41,18 @@ public class LoginController extends HttpServlet {
 		Boolean notFound = false;
 	    dispatcher = ctx.getRequestDispatcher("/login.jsp"); // default view
 	    
+	    // TODO
+	    Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+	    
 		if (command == null) { // TODO
-	    	if (userTicket != null) { // TODO
-	    		redirect = loginSuccessUrl;
+	    	if (loggedIn) { // TODO
+	    		redirect = "/ticket";
 	    	}
 	    }
 	    else if (command.equals("logout")) { // TODO
 	    	UserTicket.destoryUserTicket(session);
-	    	redirect = logoutSuccessUrl;
+	    	redirect = "/ticket";
 	    }
 	    else {
 	    	notFound = true;
@@ -60,14 +61,18 @@ public class LoginController extends HttpServlet {
 		System.out.println("Redirect:"+redirect);
 		System.out.println("NotFound:"+notFound);
 		
-		if (!redirect.equals("")) { // Redirect if redirect is set
+		if (!redirect.isEmpty()) { // Redirect if redirect is set
 			response.sendRedirect(redirect);
 			return;
 		}
-		if (notFound) { //TODO
-			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
+		if (notFound) { // displays not found page
+			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); 
 		}
-
+		
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);
+		
 	    dispatcher.forward(request,response);
 	}
 
@@ -86,46 +91,56 @@ public class LoginController extends HttpServlet {
 		Boolean notFound = false;
 		dispatcher = ctx.getRequestDispatcher("/login.jsp"); // default view
 		
+		// TODO
+		Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
+	    Boolean loggedIn = userTicket != null;
+		
+		
 		if (command == null) { // TODO
-			if (userTicket != null) { // TODO
-				redirect = loginSuccessUrl;
+			if (loggedIn) { // TODO
+				redirect = "/ticket";
 	    	}
 			else {
 				notFound = true;
 			}
 		}
 		else if (command.equals("user_login")) {
-			if (userTicket != null) { // TODO
-				redirect = loginSuccessUrl;
+			if (loggedIn) { // No need to log in if logged in.
+				redirect = "/ticket";
 	    	}
-			else { // TODO
+			else { // Logs the user in
 				String attrUsername = request.getParameter("username");
 				String attrPassword = request.getParameter("password");
 				
-				if (UserTicket.validPassword(attrUsername, attrPassword)) { //TODO
+				// Validates password
+				if (UserTicket.validPassword(attrUsername, attrPassword)) { 
 					UserTicket.setUserTicket(session, attrUsername);
-					redirect = loginSuccessUrl;
+					redirect = "/ticket";
 				}
-				else { //TODO
-					dispatcher = ctx.getRequestDispatcher("/loginFailed.jsp"); // Login Failed
+				else { // Login Failed
+					dispatcher = ctx.getRequestDispatcher("/loginFailed.jsp");
 				}
 			}
 		}
-		else { //TODO
+		else { // Command not found
 			notFound = true;
 	    }
 		
 		System.out.println("Redirect:"+redirect);
 		System.out.println("NotFound:"+notFound);
 		
-		if (redirect != null) { // Redirect if redirect is set
+		if (!redirect.isEmpty()) { // Redirect if redirect is set
 			response.sendRedirect(redirect);
 			return;
 		}
-		if (notFound) { //TODO
-			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); //not found page
+		if (notFound) { // displays not found page
+			dispatcher = ctx.getRequestDispatcher("/notFound.jsp"); 
 		}
-
+		
+		// set for all valid requests
+    	request.setAttribute("isManager", isManager);
+    	request.setAttribute("loggedIn", loggedIn);
+		
 		dispatcher.forward(request,response);
 	}
 
