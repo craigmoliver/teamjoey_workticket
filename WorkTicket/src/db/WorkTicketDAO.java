@@ -1,6 +1,3 @@
-/**
- * 
- */
 package db;
 
 import java.sql.Connection;
@@ -12,13 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
+ * Handles database access for the work ticket system. Displays the work ticket items
+ * and collects user input to create work tickets. This is a Data Access Object (DAO).
  * @author TeamJoey
  *
  */
 public class WorkTicketDAO {
 
 	/**
-	 * 
+	 * Creates PreparedStatements to allow access to db.
 	 */
 	protected PreparedStatement selectAnnotationStatement;
 	protected PreparedStatement selectAllAnnotationStatement;
@@ -37,7 +36,7 @@ public class WorkTicketDAO {
 	
 	
 	/**
-	 * 
+	 * Connects to db. Initializes annotations, users, and work tickets.
 	 */
 	public WorkTicketDAO() {
 		
@@ -82,7 +81,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Returns new Annotation ID# from db.
 	 * @param annotationId
 	 * @return
 	 */
@@ -106,7 +105,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Returns complete list of Annotations.
 	 * @return
 	 */
 	public ArrayList<AnnotationDTO> listAnnotations(){
@@ -131,7 +130,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Returns annotations from a specific work ticket.
 	 * @param ticketId
 	 * @return
 	 */
@@ -158,7 +157,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Saves new annotations to a specific work ticket.
 	 * @param annotation
 	 * @return
 	 */
@@ -192,7 +191,7 @@ public class WorkTicketDAO {
 	}
 
 	/**
-	 * 
+	 * Returns new ticket ID# from db.
 	 * @param ticketId
 	 * @return
 	 */
@@ -216,7 +215,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of all work tickets.
 	 * @return
 	 */
 	public ArrayList<TicketDTO> listTickets() {
@@ -241,7 +240,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Returns a list of work tickets assigned to a user.
 	 * @return
 	 */
 	public ArrayList<TicketDTO> listTickets(String assignedTo) {
@@ -267,7 +266,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Saves work ticket to db. Checks db for existing ticket ID#.
 	 * @param ticket
 	 * @return
 	 */
@@ -321,7 +320,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Adds a new user to the db.
 	 * @param userId
 	 * @return
 	 */
@@ -345,7 +344,7 @@ public class WorkTicketDAO {
 	}
 	
 	/**
-	 * 
+	 * Checks user log-in credentials against the db.
 	 * @param user
 	 * @return
 	 */

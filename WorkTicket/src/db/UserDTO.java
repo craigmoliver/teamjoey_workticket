@@ -1,12 +1,10 @@
-/**
- * 
- */
 package db;
 
 
 /**
+ * Represents a User account in the work ticket system. This includes a new or existing user, username, password,
+ * email address, name of the user, and the user's role. This is a Data Transfer Object (DTO).
  * @author TeamJoey
- *
  */
 public class UserDTO {
 	private boolean newUser;
@@ -17,7 +15,7 @@ public class UserDTO {
 	private String role;
 	
 	/**
-	 * 
+	 * Loads an empty User constructor for a User that does not currently have a username.
 	 */
 	public UserDTO() {
 		setNewUser(true);
@@ -29,7 +27,7 @@ public class UserDTO {
 	}
 	
 	/**
-	 * 
+	 * Loads an empty User constructor for a User that currently has an active username.
 	 * @return
 	 */
 	public UserDTO(String username, String passhash, String email, String name, String role) {
@@ -42,6 +40,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Returns whether the User has an active username, or not.
 	 * @return the newUser
 	 */
 	public boolean isNewUser() {
@@ -49,6 +48,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Sets the username of the User.
 	 * @param newUser the newUser to set
 	 */
 	public void setNewUser(boolean newUser) {
@@ -56,7 +56,7 @@ public class UserDTO {
 	}
 
 	/**
-	 * 
+	 * Returns the username of the User.
 	 * @return
 	 */
 	public String getUsername() {
@@ -64,7 +64,7 @@ public class UserDTO {
 	}
 	
 	/**
-	 * 
+	 * Sets the username of the User.
 	 * @param username
 	 */
 	public void setUsername(String username) {
@@ -72,6 +72,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Returns the password of the User.
 	 * @return the passhash
 	 */
 	public String getPasshash() {
@@ -79,6 +80,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Sets the password of the User.
 	 * @param passhash the passhash to set
 	 */
 	public void setPasshash(String passhash) {
@@ -86,6 +88,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Returns the email address of the User.
 	 * @return the email
 	 */
 	public String getEmail() {
@@ -93,6 +96,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Sets the email address of the User.
 	 * @param email the email to set
 	 */
 	public void setEmail(String email) {
@@ -100,6 +104,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Returns the name of the User.
 	 * @return the name
 	 */
 	public String getName() {
@@ -107,6 +112,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Sets the name of the User.
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
@@ -114,6 +120,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Returns the role of the User.
 	 * @return the role
 	 */
 	public String getRole() {
@@ -121,6 +128,7 @@ public class UserDTO {
 	}
 
 	/**
+	 * Sets the role of the User.
 	 * @param role the role to set
 	 */
 	public void setRole(String role) {

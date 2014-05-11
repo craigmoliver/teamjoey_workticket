@@ -14,6 +14,9 @@ import db.UserDTO;
 
 /**
  * Servlet implementation class LoginController
+ * Manages all requests for the log-in credentials in the work ticket system. GET requests are to verify user
+ * account credentials and view existing work tickets. POST requests are to verify and access existing work tickets.
+ * @author TeamJoey
  */
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +30,7 @@ public class LoginController extends HttpServlet {
     }
 
 	/**
+	 * Process a request to log-in and view a work ticket.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,6 +81,7 @@ public class LoginController extends HttpServlet {
 	}
 
 	/**
+	 * Process a request to log-in and access a work ticket.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
