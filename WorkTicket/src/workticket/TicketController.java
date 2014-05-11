@@ -16,6 +16,9 @@ import db.WorkTicketDAO;
 
 /**
  * Servlet implementation class TicketController
+ * Manages all requests for the work tickets in the work ticket system. GET requests are to view, confirm, and edit existing 
+ * work tickets. POST requests are to edit, save and submit new work tickets to db.
+ * @author TeamJoey
  */
 public class TicketController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +31,7 @@ public class TicketController extends HttpServlet {
     }
 
 	/**
+	 * Process a request to view, edit, confirm a work ticket.
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -159,6 +163,7 @@ public class TicketController extends HttpServlet {
 	}
 
 	/**
+	 * Process a request to edit, save and submit a work ticket.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

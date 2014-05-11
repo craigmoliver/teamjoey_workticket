@@ -11,16 +11,15 @@ import db.UserDTO;
 import db.WorkTicketDAO;
 
 /**
- * 
- * @author TODO
- *
+ * Opens a connection to the db and initializes all PrepareStatements used by the LoginController.
+ * @author TeamJoey
  */
 public class UserHelper {
 	private UserDTO user;
 	private ArrayList<String> allRoles;
 	
 	/**
-	 * 
+	 * Verifies username and its role for access of a work ticket.
 	 * @param username
 	 */
 	public UserHelper(String username) {
@@ -31,7 +30,7 @@ public class UserHelper {
 	}
 	
 	/**
-	 * 
+	 * Verifies user exists in db.
 	 */
 	public UserHelper() {
 		setUser(new UserDTO());
@@ -45,7 +44,7 @@ public class UserHelper {
 	}	
 	
 	/**
-	 * 
+	 * Initializes the roles in the db.
 	 */
 	private void populateAllRoles(){
 		allRoles = new ArrayList<String>();
@@ -54,7 +53,7 @@ public class UserHelper {
 	}
 	
 	/**
-	 * 
+	 * Loads empty user constructor with name, email, username, password, and role.
 	 * @param name
 	 * @param email
 	 * @param username
@@ -86,6 +85,7 @@ public class UserHelper {
 	}
 
 	/**
+	 * Returns the user's name.
 	 * @return the user
 	 */
 	public UserDTO getUser() {
@@ -93,6 +93,7 @@ public class UserHelper {
 	}
 
 	/**
+	 * Sets the user's name.
 	 * @param user the user to set
 	 */
 	public void setUser(UserDTO user) {
@@ -100,6 +101,7 @@ public class UserHelper {
 	}	
 	
 	/**
+	 * Returns a list of roles available for a user.
 	 * @return the allRoles
 	 */
 	public ArrayList<String> getAllRoles() {
