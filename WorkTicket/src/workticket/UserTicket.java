@@ -1,6 +1,3 @@
-/**
- * 
- */
 package workticket;
 
 import java.security.NoSuchAlgorithmException;
@@ -12,13 +9,14 @@ import db.UserDTO;
 import db.WorkTicketDAO;
 
 /**
- * @author 
+ * Manages session scope of username and password security log-in.
+ * @author TeamJoey
  *
  */
 public class UserTicket {
 
 	/**
-	 * 
+	 * Validates username and password match in the db to allow access to a work ticket.
 	 * @param username
 	 * @param password
 	 * @return
@@ -43,9 +41,9 @@ public class UserTicket {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * 
+	 * Loads username within existing session.
 	 * @param session
 	 * @param username
 	 */
@@ -54,18 +52,18 @@ public class UserTicket {
 		UserDTO user = workTicketDAO.loadUser(username);		
 		session.setAttribute("userTicket", user);
 	}
-	
+
 	/**
-	 * 
+	 * Returns work ticket of a user within existing session.
 	 * @param session
 	 * @return
 	 */
 	public static UserDTO getUserTicket(HttpSession session){
 		return (UserDTO)session.getAttribute("userTicket"); 
 	}
-	
+
 	/**
-	 * 
+	 * Ends an existing log-in session.
 	 * @param session
 	 */
 	public static void destoryUserTicket(HttpSession session) {

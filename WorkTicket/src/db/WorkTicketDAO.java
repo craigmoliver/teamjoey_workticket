@@ -1,6 +1,3 @@
-/**
- * 
- */
 package db;
 
 import java.sql.Connection;
@@ -12,13 +9,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
+ * Handles database access for the work ticket system. Displays the work ticket items
+ * and collects user input to create work tickets. This is a Data Access Object (DAO).
  * @author TeamJoey
  *
  */
 public class WorkTicketDAO {
 
 	/**
-	 * 
+	 * Creates PreparedStatements to allow access to db.
 	 */
 	protected PreparedStatement selectAnnotationStatement;
 	protected PreparedStatement selectAllAnnotationStatement;
@@ -34,45 +33,46 @@ public class WorkTicketDAO {
 	protected PreparedStatement selectUserStatement;
 	protected PreparedStatement updateUserStatement;
 	protected PreparedStatement insertUserStatement;
-	
-	
+
+
 	/**
-	 * 
+	 * Connects to db. Initializes annotations, users, and work tickets.
 	 */
 	public WorkTicketDAO() {
-		
+
 		try {
 
 			// AMAZON RDS configuration
 			//String jdbcUrl = "jdbc:mysql://mist7510workticket.cxja2uv5sze4.us-east-1.rds.amazonaws.com:3306/workticket";
 			//String username = "awsuser";
 			//String password = "wax&sh1ne";
-			
+
 			// LOCALHOST configuration
-			String jdbcUrl = "jdbc:mysql://localhost:3306/workticket";
+			String jdbcUrl = "jdbc:mysql://Shos-Air.local/workticket";
 			String username = "awsuser";
 			String password = "abc123";
 
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
-			
-			selectAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE annotationId = ?");
-			selectAllAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation ORDER BY datePosted DESC");
-			updateAnnotationStatement = conn.prepareStatement("UPDATE annotation SET ticketId = ?, authorUsername = ?, text = ?, datePosted = ? WHERE annotationId = ?");
-			insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE ticketId = ? ORDER BY datePosted DESC");
-			
-			selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE ticketId = ?");
-			selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket ORDER BY datePosted ASC");
-			selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
-			updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ? WHERE ticketId = ?");
-			insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			
-			selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
-			selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
-			updateUserStatement = conn.prepareStatement("UPDATE user SET passHash = ?, email = ?, name = ?, role = ? WHERE username = ?");
-			insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name, role) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			
+			//System.out.println("Connected to DB!");
+			//Annotation Prepared Statements
+			this.selectAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE annotationId = ?");
+			this.selectAllAnnotationStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation ORDER BY datePosted DESC");
+			this.updateAnnotationStatement = conn.prepareStatement("UPDATE annotation SET ticketId = ?, authorUsername = ?, text = ?, datePosted = ? WHERE annotationId = ?");
+			this.insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			this.selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE ticketId = ? ORDER BY datePosted DESC");
+			//Ticket Prepared Statements
+			this.selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE ticketId = ?");
+			this.selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket ORDER BY datePosted ASC");
+			this.selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
+			this.updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ? WHERE ticketId = ?");
+			this.insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			//User Prepared Statements
+			this.selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
+			this.selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
+			this.updateUserStatement = conn.prepareStatement("UPDATE user SET passHash = ?, email = ?, name = ?, role = ? WHERE username = ?");
+			this.insertUserStatement = conn.prepareStatement("INSERT INTO user (username, passHash, email, name, role) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+
 			// SQL to query the database.
 		} catch (Exception e) {
 			//print out error for debugging.
@@ -80,9 +80,9 @@ public class WorkTicketDAO {
 
 		}
 	}
-	
+
 	/**
-	 * 
+	 * Returns Annotation with selected ID# from db.
 	 * @param annotationId
 	 * @return
 	 */
@@ -104,9 +104,9 @@ public class WorkTicketDAO {
 		}
 		return new AnnotationDTO();
 	}
-	
+
 	/**
-	 * 
+	 * Returns complete list of Annotations.
 	 * @return
 	 */
 	public ArrayList<AnnotationDTO> listAnnotations(){
@@ -129,9 +129,9 @@ public class WorkTicketDAO {
 		}
 		return new ArrayList<AnnotationDTO>();
 	}
-	
+
 	/**
-	 * 
+	 * Returns annotations from a specific work ticket.
 	 * @param ticketId
 	 * @return
 	 */
@@ -156,16 +156,16 @@ public class WorkTicketDAO {
 		}
 		return new ArrayList<AnnotationDTO>();
 	}
-	
+
 	/**
-	 * 
+	 * Saves new annotations to a specific work ticket.
 	 * @param annotation
 	 * @return
 	 */
 	public int saveAnnotation(AnnotationDTO annotation) {
 		try{
 			if (annotation.getAnnotationId() > 0) {
-				
+
 				updateAnnotationStatement.setInt(1, annotation.getAnnotationId());
 				updateAnnotationStatement.setInt(2, annotation.getTicketId());
 				updateAnnotationStatement.setString(3, annotation.getAuthorUsername());
@@ -192,7 +192,7 @@ public class WorkTicketDAO {
 	}
 
 	/**
-	 * 
+	 * Returns a ticket based on ID# from db.
 	 * @param ticketId
 	 * @return
 	 */
@@ -214,9 +214,9 @@ public class WorkTicketDAO {
 		}
 		return new TicketDTO();
 	}
-	
+
 	/**
-	 * 
+	 * Returns a list of all work tickets.
 	 * @return
 	 */
 	public ArrayList<TicketDTO> listTickets() {
@@ -239,9 +239,9 @@ public class WorkTicketDAO {
 		}
 		return new ArrayList<TicketDTO>();
 	}
-	
+
 	/**
-	 * 
+	 * Returns a list of work tickets assigned to a user.
 	 * @return
 	 */
 	public ArrayList<TicketDTO> listTickets(String assignedTo) {
@@ -265,9 +265,9 @@ public class WorkTicketDAO {
 		}
 		return new ArrayList<TicketDTO>();
 	}
-	
+
 	/**
-	 * 
+	 * Saves work ticket to db. Checks db for existing ticket ID#.
 	 * @param ticket
 	 * @return
 	 */
@@ -298,7 +298,10 @@ public class WorkTicketDAO {
 		}
 		return 0;
 	}
-
+	
+	/**
+	 * Retrieves a list of all users
+	 */			
 	public ArrayList<UserDTO> listUsers(){
 		try{		
 			ResultSet rs = selectAllUserStatement.executeQuery();
@@ -317,12 +320,12 @@ public class WorkTicketDAO {
 			System.out.println("Exception retrieving list of users: " + e.getMessage());
 		}
 		return new ArrayList<UserDTO>();
-		
+
 	}
-	
+
 	/**
-	 * 
-	 * @param userId
+	 * Retrieves User via their username
+	 * @param username
 	 * @return
 	 */
 	public UserDTO loadUser(String username) {
@@ -343,9 +346,10 @@ public class WorkTicketDAO {
 		}
 		return new UserDTO();
 	}
-	
+
 	/**
-	 * 
+	 * Checks user against the db to see if new user
+	 * if new user adds them if not updates their information
 	 * @param user
 	 * @return
 	 */
@@ -377,5 +381,5 @@ public class WorkTicketDAO {
 		return "";
 	}
 
-	
+
 }

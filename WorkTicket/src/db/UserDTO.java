@@ -33,7 +33,7 @@ public class UserDTO {
 	 * @return
 	 */
 	public UserDTO(String username, String passhash, String email, String name, String role) {
-		setNewUser(false);
+		//setNewUser(false); // not needed and messed up testing
 		setUsername(username);
 		setPasshash(passhash);
 		setEmail(email);

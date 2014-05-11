@@ -47,7 +47,7 @@ public class LoginController extends HttpServlet {
 	    
 		if (command == null) { // TODO
 	    	if (loggedIn) { // TODO
-	    		redirect = "/ticket";
+	    		redirect = "/ticket"; //updated from ticket
 	    	}
 	    }
 	    else if (command.equals("logout")) { // TODO
