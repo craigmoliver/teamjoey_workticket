@@ -124,17 +124,17 @@ public class WorkTicketDAOTest extends TestCase {
 	 */
 	public void testTicketDbMethods() throws Exception{
 		WorkTicketDAO instance4 = new WorkTicketDAO();
-		ArrayList<TicketDTO> tickets = instance4.listTickets();
-		assertTrue("The initial number of all tickets is empty",tickets.isEmpty());
-		TicketDTO tik1 = new TicketDTO(001, instDatePost, "Tie caught in printer", "What had happened was that there was a tie. Then there was a printer then somehow they decided to fight each other.", "Shomari Me");
-		TicketDTO tik2 = new TicketDTO(002, instDatePost, "Tie caught in fax machine", "What had happened was that there was a tie. Then there was a fax machinethen somehow they decided to fight each other.", "Craig Name");
-		TicketDTO tik3 = new TicketDTO(003, instDatePost, "Tie caught in paper schredder", "What had happened was that there was a tie. Then there was a paper schredder then somehow they decided to fight each other.", "Craig Name");
+		//ArrayList<TicketDTO> tickets = instance4.listTickets();
+		//assertTrue("The initial number of all tickets is empty",tickets.isEmpty());
+		TicketDTO tik1 = new TicketDTO(-1, instDatePost, "Tie caught in printer", "What had happened was that there was a tie. Then there was a printer then somehow they decided to fight each other.", "Shomari Me");
+		TicketDTO tik2 = new TicketDTO(-2, instDatePost, "Tie caught in fax machine", "What had happened was that there was a tie. Then there was a fax machinethen somehow they decided to fight each other.", "Craig Name");
+		TicketDTO tik3 = new TicketDTO(-3, instDatePost, "Tie caught in paper schredder", "What had happened was that there was a tie. Then there was a paper schredder then somehow they decided to fight each other.", "Craig Name");
 		//This guy should stop wearing ties... Just saying...
 		
 		/**Test save tickets */
-		instance4.saveTicket(tik1);
-		instance4.saveTicket(tik2);
-		instance4.saveTicket(tik3);
+		int holdID1 = instance4.saveTicket(tik1);
+		int holdID2 = instance4.saveTicket(tik2);
+		int holdID3 = instance4.saveTicket(tik3);
 		
 		/**Test List all tickets */
 		ArrayList<TicketDTO> tickets2 = instance4.listTickets();
@@ -147,52 +147,45 @@ public class WorkTicketDAOTest extends TestCase {
 		assertEquals("The number of Sho tickets ",1,ticketsUser2.size());
 		
 		/** Test loading tickets*/
-		TicketDTO testTik1 = instance4.loadTicket(001);
+		TicketDTO testTik1 = instance4.loadTicket(holdID1);
 		assertEquals("This ticket was assigned to","Shomari Me",testTik1.getAssignedTo());
-		TicketDTO testTik2 = instance4.loadTicket(003);
+		TicketDTO testTik2 = instance4.loadTicket(holdID3);
 		assertEquals("This ticket was assigned to","Tie caught in paper schredder",testTik2.getTitle());
-	}
-
-	/**
-	 * Test Returns a list of all work tickets.
-	*/
-	public void testListTickets() throws Exception{
-		
-	}
-
-	/**
-	 * Test Returns a list of work tickets assigned to a user.
-	*/
-	public void testListTicketsString() throws Exception{
-		
-	}
-
-	/**
-	 * Test Saves work ticket to db. Checks db for existing ticket ID#
-	*/
-	public void testSaveTicket() throws Exception{
-		
 	}	
 	
 	// ------------------Annotation Tests----------------- //
 	/**
-	 * Test Returns complete list of Annotations.
+	 * Test listing annotations, a tickets annotations
 	*/
-	public void testListAnnotations() throws Exception{
+	public void testAnnotationDbMethods() throws Exception{
+		WorkTicketDAO instance5 = new WorkTicketDAO();
+		ArrayList<AnnotationDTO> annoList = instance5.listAnnotations();
+		assertTrue("The initial number of all tickets is empty",annoList.isEmpty());
 		
-	}
-
-	/**
-	 * Test Returns annotations from a specific work ticket.
-	*/
-	public void testListTicketAnnotations() throws Exception{
+		/**Load some Annotations */
+		AnnotationDTO anno1 = new AnnotationDTO(-1, 8, "shoPower", "This guy is stupid", instDatePost);
+		AnnotationDTO anno2 = new AnnotationDTO(-2, 9, "crayCraig", "This guy should void all electronics.", instDatePost);
+		AnnotationDTO anno3 = new AnnotationDTO(-3, 9, "crayCraig", "Someone please help this man.", instDatePost);
+		/**Test save Annotations */
+		int annoID1 = instance5.saveAnnotation(anno1);
+		int annoID2 = instance5.saveAnnotation(anno2);
+		int annoID3 = instance5.saveAnnotation(anno3);
 		
-	}
-
-	/**
-	 * Test Saves new annotations to a specific work ticket.
-	 */
-	public void testSaveAnnotation() throws Exception{
+		/**Test List all Annotations */
+		ArrayList<AnnotationDTO> annoList2 = instance5.listAnnotations();
+		assertEquals("The number of all tickets after adding more tickets ",3,annoList2.size());
+		
+		/**Test List Annotations per ticket  */
+		ArrayList<AnnotationDTO> annoTicket = instance5.listTicketAnnotations(9);
+		assertEquals("The number of Craig tickets ",2,annoTicket.size());
+		ArrayList<AnnotationDTO> annoTicket2 = instance5.listTicketAnnotations(8);
+		assertEquals("The number of Sho tickets ",1,annoTicket2.size());
+		
+		/** Test loading Annotations */
+		AnnotationDTO testAnno1 = instance5.loadAnnotation(annoID1);
+		assertEquals("This ticket was assigned to","shoPower",testAnno1.getAuthorUsername());
+		AnnotationDTO testAnno2 = instance5.loadAnnotation(annoID3);
+		assertEquals("This ticket was assigned to","Someone please help this man.",testAnno2.getText());
 		
 	}
 
