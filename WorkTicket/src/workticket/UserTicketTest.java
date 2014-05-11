@@ -13,9 +13,15 @@ public class UserTicketTest extends TestCase{
 	 * Validates username and password match in the db to allow access to a work ticket.
 	 */
 	public void testValidPassword() {
-		
-		assertFalse(UserTicket.validPassword("shoPower", "shopass333"));
-		assertTrue(UserTicket.validPassword("shoPower", "shopass"));
+		UserTicket instance1 = new UserTicket();
+		//boolean testPass = instance1.validPassword("shoPower", "shopass");
+		//System.out.print(testPass);
+		//System.out.print(testPass);
+		assertEquals(instance1.validPassword(username, password));
+		String username = "shoPower";
+		String password = "shopass";
+		assertFalse(instance1.validPassword(username, password));
+		assertTrue(instance1.validPassword(username,password));
 	}
 
 	/**
