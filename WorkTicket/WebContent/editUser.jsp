@@ -91,7 +91,7 @@
 				    <div class="form-group">
 				    	<div class="col-lg-offset-2 col-lg-10">
 				    		<button type="submit" class="btn btn-primary">Save</button>
-				    		<a type="button" class="btn btn-default" href="/WorkTicket?command=user_list">Cancel</a>
+				    		<a type="button" class="btn btn-default" href="/ticket?command=user_list">Cancel</a>
 				    	</div>
 			    	</div>
 			    	

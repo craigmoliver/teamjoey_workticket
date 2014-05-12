@@ -16,7 +16,6 @@ public class UserDTOTest extends TestCase {
 	 * Tests adding a user to the work ticket system.
 	 * @Test
 	 */
-	
 	public void testConstructor() {
 		UserDTO user = new UserDTO("johnq", "public", "johnq@work.com", "John Q Public", "worker");
 		assertEquals("Username", "johnq",user.getUsername());
@@ -32,8 +31,8 @@ public class UserDTOTest extends TestCase {
 	 public void testNewUser() {
 		 UserDTO newuser = new UserDTO("jlewis", "passcode", "jlewis@email.com", "Jeff Lewis", "worker");
 		 assertEquals("Username", "jlewis", newuser.getUsername());
-		 assertTrue(newuser.getUsername("jlewis"));
-		 assertFalse(newuser.getUsername(null));
+		 assertTrue(newuser.getUsername().equals("jlewis"));
+		 assertFalse(newuser.getUsername().equals(null));
 		 
     }
 	
@@ -69,7 +68,7 @@ public class UserDTOTest extends TestCase {
 	 */
 	public void testName(){
 		UserDTO user4 = new UserDTO();
-		user4.setName("Jeff");
+		user4.setName("Jeff Lewis");
 		assertEquals("Name", "Jeff Lewis", user4.getName());
 	}
 

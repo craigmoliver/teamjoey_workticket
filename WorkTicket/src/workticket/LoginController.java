@@ -45,20 +45,20 @@ public class LoginController extends HttpServlet {
 		Boolean notFound = false;
 	    dispatcher = ctx.getRequestDispatcher("/login.jsp"); // default view
 	    
-	    // TODO
+	    // set when user 
 	    Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
 	    Boolean loggedIn = userTicket != null;
 	    
-		if (command == null) { // TODO
-	    	if (loggedIn) { // TODO
+		if (command == null) { // command is null
+	    	if (loggedIn) { // logged in, go to ticket listing
 	    		redirect = "/ticket"; //updated from ticket
 	    	}
 	    }
-	    else if (command.equals("logout")) { // TODO
+	    else if (command.equals("logout")) { // destroy user session
 	    	UserTicket.destoryUserTicket(session);
 	    	redirect = "/ticket";
 	    }
-	    else {
+	    else { // not found
 	    	notFound = true;
 	    }
 	    
@@ -101,15 +101,15 @@ public class LoginController extends HttpServlet {
 	    Boolean loggedIn = userTicket != null;
 		
 		
-		if (command == null) { // TODO
-			if (loggedIn) { // TODO
+		if (command == null) { // command is null
+			if (loggedIn) { // logged in, go to ticket listing
 				redirect = "/ticket";
 	    	}
-			else {
+			else { // not logged in then notfound
 				notFound = true;
 			}
 		}
-		else if (command.equals("user_login")) {
+		else if (command.equals("user_login")) { // user login
 			if (loggedIn) { // No need to log in if logged in.
 				redirect = "/ticket";
 	    	}

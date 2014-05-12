@@ -126,9 +126,9 @@ public class WorkTicketDAOTest extends TestCase {
 		WorkTicketDAO instance4 = new WorkTicketDAO();
 		//ArrayList<TicketDTO> tickets = instance4.listTickets();
 		//assertTrue("The initial number of all tickets is empty",tickets.isEmpty());
-		TicketDTO tik1 = new TicketDTO(-1, instDatePost, "Tie caught in printer", "What had happened was that there was a tie. Then there was a printer then somehow they decided to fight each other.", "Shomari Me");
-		TicketDTO tik2 = new TicketDTO(-2, instDatePost, "Tie caught in fax machine", "What had happened was that there was a tie. Then there was a fax machinethen somehow they decided to fight each other.", "Craig Name");
-		TicketDTO tik3 = new TicketDTO(-3, instDatePost, "Tie caught in paper schredder", "What had happened was that there was a tie. Then there was a paper schredder then somehow they decided to fight each other.", "Craig Name");
+		TicketDTO tik1 = new TicketDTO(-1, instDatePost, "Tie caught in printer", "What had happened was that there was a tie. Then there was a printer then somehow they decided to fight each other.", "Shomari Me", "open");
+		TicketDTO tik2 = new TicketDTO(-2, instDatePost, "Tie caught in fax machine", "What had happened was that there was a tie. Then there was a fax machinethen somehow they decided to fight each other.", "Craig Name", "open");
+		TicketDTO tik3 = new TicketDTO(-3, instDatePost, "Tie caught in paper schredder", "What had happened was that there was a tie. Then there was a paper schredder then somehow they decided to fight each other.", "Craig Name", "open");
 		//This guy should stop wearing ties... Just saying...
 		
 		/**Test save tickets */

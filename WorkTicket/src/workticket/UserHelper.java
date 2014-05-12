@@ -53,7 +53,7 @@ public class UserHelper {
 	}
 	
 	/**
-	 * Loads empty user constructor with name, email, username, password, and role.
+	 * Saves new user.
 	 * @param name
 	 * @param email
 	 * @param username
@@ -76,10 +76,29 @@ public class UserHelper {
 			user.setRole(role);
 			workTicketDAO.saveUser(user);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Changes user password
+	 * @param username
+	 * @param password
+	 */
+	public static void changeUserPassword(String username, String password) {
+		try {
+			WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+			UserDTO user = workTicketDAO.loadUser(username);		
+			// update if set, save if new
+			if ((!user.isNewUser() && !password.isEmpty())) { 
+				user.setPasshash(PasswordHash.createHash(password));
+			}
+			workTicketDAO.saveUser(user);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
 	}

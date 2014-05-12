@@ -20,6 +20,7 @@ public class TicketHelper {
 	private ArrayList<AnnotationDTO> annotations;
 	private Boolean hasAnnotations;
 	private ArrayList<String> users;
+	private ArrayList<String> statuses;
 	
 	/**
 	 * Verifies annotations on a specific ticket ID#.
@@ -39,12 +40,18 @@ public class TicketHelper {
 		}
 		setAnnotations(annotations);
 		
+		// Adds users list for assignment in manager view
 		ArrayList<String> users = new ArrayList<String>();
 		users.add(""); // add blank option
 		for (UserDTO user: workTicketDAO.listUsers()) { // adds users for select box
 			users.add(user.getUsername());
 		}
 		setUsers(users);
+		
+		// Adds statuses list to be set in manager view
+		ArrayList<String> statuses = new ArrayList<String>();
+		statuses.add("open");
+		statuses.add("closed");
 	}
 	
 	/**
@@ -123,6 +130,18 @@ public class TicketHelper {
 	}
 	
 	/**
+	 * Updates the ticket's status
+	 * @param ticketId 
+	 * @param status
+	 */
+	public static void updateTicketStatus(int ticketId, String status) {
+		WorkTicketDAO workTicketDAO = new WorkTicketDAO();
+		TicketDTO ticket = workTicketDAO.loadTicket(ticketId);
+		ticket.setStatus(status);
+		workTicketDAO.saveTicket(ticket);
+	}
+	
+	/**
 	 * Returns a work ticket.
 	 * @return the ticket
 	 */
@@ -194,6 +213,22 @@ public class TicketHelper {
 	 */
 	public void setUsers(ArrayList<String> users) {
 		this.users = users;
+	}
+
+	/**
+	 * Returns list of statuses
+	 * @return the statuses
+	 */
+	public ArrayList<String> getStatuses() {
+		return statuses;
+	}
+
+	/**
+	 * Sets statuses ArrayList
+	 * @param statuses the statuses to set
+	 */
+	public void setStatuses(ArrayList<String> statuses) {
+		this.statuses = statuses;
 	}
 	
 	

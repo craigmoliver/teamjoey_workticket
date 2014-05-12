@@ -16,6 +16,7 @@ public class TicketDTO {
 	private String title;
 	private String description;
 	private String assignedTo;
+	private String status;
 	
 	/**
 	 * Sets an empty Work Ticket constructor.
@@ -26,6 +27,7 @@ public class TicketDTO {
 		setTitle("");
 		setDescription("");
 		setAssignedTo("");
+		setStatus("open");
 	}
 	
 	/**
@@ -35,7 +37,7 @@ public class TicketDTO {
 	 * @param title
 	 * @param description
 	 */
-	public TicketDTO(int ticketId, Date datePosted, String title, String description, String assignedTo) {
+	public TicketDTO(int ticketId, Date datePosted, String title, String description, String assignedTo, String status) {
 		// setup calendar
 		GregorianCalendar calDatePosted = new GregorianCalendar();
 		calDatePosted.setTime(datePosted);
@@ -45,6 +47,7 @@ public class TicketDTO {
 		setTitle(title);
 		setDescription(description);
 		setAssignedTo(assignedTo);
+		setStatus(status);
 	}
 	
 	/**
@@ -127,5 +130,21 @@ public class TicketDTO {
 	 */
 	public void setAssignedTo(String assignedTo) {
 		this.assignedTo = assignedTo;
+	}
+
+	/**
+	 * Returns the status of the Work Ticket.
+	 * @return
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * Sets the status that is assigned the Work Ticket.
+	 * @param status
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

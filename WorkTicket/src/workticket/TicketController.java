@@ -45,13 +45,13 @@ public class TicketController extends HttpServlet {
 		Boolean notAuthorized = false;
 		UserDTO userTicket = UserTicket.getUserTicket(session);
 		
-		// TODO
+		// helper variables
 	    Boolean isManager = userTicket != null && userTicket.getRole().equals("Manager");
 	    Boolean loggedIn = userTicket != null;
 		
 		if (loggedIn){
 			if (command == null){ //initial request
-				if (isManager) { // TODO
+				if (isManager) { // if manager display all tickets
 					request.setAttribute("title", "All Tickets (Manager View)");
 			    	request.setAttribute("formheader", "Tickets");
 			    	request.setAttribute("tickets", TicketHelper.listTickets());
@@ -63,8 +63,8 @@ public class TicketController extends HttpServlet {
 				}
 				dispatcher = ctx.getRequestDispatcher("/listTicket.jsp");
 		    }
-			else if (command.equals("user_list")) { // TODO
-				if (isManager) {
+			else if (command.equals("user_list")) { // List users for editing
+				if (isManager) { // allowed if manager
 					request.setAttribute("users", new WorkTicketDAO().listUsers());
 			    	request.setAttribute("title", "Users");
 			    	dispatcher = ctx.getRequestDispatcher("/listUsers.jsp");
@@ -73,8 +73,8 @@ public class TicketController extends HttpServlet {
 		    		notAuthorized = true;
 		    	}
 		    }
-		    else if (command.equals("user_new")) { // TODO
-		    	if (isManager) {
+		    else if (command.equals("user_new")) { // New User form
+		    	if (isManager) { // allowed if manager
 		    		UserHelper userHelper = new UserHelper();
 			    	request.setAttribute("title", "Users");
 			    	request.setAttribute("formheader", "New");
@@ -85,8 +85,8 @@ public class TicketController extends HttpServlet {
 		    		notAuthorized = true;
 		    	}
 		    }
-		    else if (command.equals("user_edit")) { // TODO
-				if (isManager) {
+		    else if (command.equals("user_edit")) { // Edit User form
+				if (isManager) { // allowed if manager
 					String paramUsername = request.getParameter("username");
 					if (paramUsername != null) {
 						UserHelper userHelper = new UserHelper(paramUsername);
@@ -105,7 +105,10 @@ public class TicketController extends HttpServlet {
 		    		notAuthorized = true;
 		    	}
 		    }
-		    else if (command.equals("ticket_view")) {
+		    else if (command.equals("user_changepassword")) { // change password form
+		    	dispatcher = ctx.getRequestDispatcher("/changeUserPassword.jsp");
+		    }
+		    else if (command.equals("ticket_view")) { // ticket view
 		    	String paramTicketId = request.getParameter("ticketId");
 		    	
 		    	TicketHelper ticketHelper = new TicketHelper(Integer.parseInt(paramTicketId));
@@ -120,9 +123,8 @@ public class TicketController extends HttpServlet {
 			    	dispatcher = ctx.getRequestDispatcher("/viewTicket.jsp");
 		    	}
 		    }
-		    else { // TODO
-			    
-			    
+		    else { // any other command, not found
+		    	notFound = true;
 		    }
 		}
 		else {
@@ -137,8 +139,6 @@ public class TicketController extends HttpServlet {
 				redirect = "/login";
 			}
 		}
-		
-		
 				
 	    System.out.println("Redirect:"+redirect);
 	    System.out.println(!redirect.equals(""));
@@ -202,6 +202,17 @@ public class TicketController extends HttpServlet {
 	    		notAuthorized = true;
 	    	}
 		}
+	    else if (command.equals("ticket_updatestatus")) { // Updates ticket status
+	    	if (loggedIn && isManager) { // Must be logged in and a manager
+	    		String attrStatus = request.getParameter("status");
+	    		String attrTicketId = request.getParameter("ticketId");
+	    		
+	    		// Input parameters must not be empty
+	    		if (!attrStatus.isEmpty() && !attrTicketId.isEmpty()) {
+	    			TicketHelper.updateTicketStatus(Integer.parseInt(attrTicketId), attrStatus);
+	    		}
+	    	}
+	    }
 	    else if (command.equals("user_save")) { // Saves an User
 	    	if (loggedIn && isManager) { // Must be logged in and a manager
 				String attrName = request.getParameter("name");
@@ -216,6 +227,16 @@ public class TicketController extends HttpServlet {
 					UserHelper.saveUser(attrName, attrEmail, attrUsername, attrPassword, attrRole);
 					redirect = "/ticket?command=user_list"; // redirect back to list of Users
 				}
+	    	}
+	    	else { // Not Authorized
+	    		notAuthorized = true;	
+	    	}
+	    }
+	    else if (command.equals("user_changepassword")) { // allows user to change password
+	    	if (loggedIn) { // allowed if logged in
+	    		String attrPassword = request.getParameter("password");
+	    		UserHelper.changeUserPassword(userTicket.getUsername(), attrPassword);
+	    		redirect = "/login?command=logout"; // logs user out to log back in with new password
 	    	}
 	    	else { // Not Authorized
 	    		notAuthorized = true;	

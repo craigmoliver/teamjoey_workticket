@@ -43,14 +43,14 @@ public class WorkTicketDAO {
 		try {
 
 			// AMAZON RDS configuration
-			//String jdbcUrl = "jdbc:mysql://mist7510workticket.cxja2uv5sze4.us-east-1.rds.amazonaws.com:3306/workticket";
-			//String username = "awsuser";
-			//String password = "wax&sh1ne";
+			String jdbcUrl = "jdbc:mysql://mist7510workticket.cxja2uv5sze4.us-east-1.rds.amazonaws.com:3306/workticket";
+			String username = "awsuser";
+			String password = "wax&sh1ne";
 
 			// LOCALHOST configuration
-			String jdbcUrl = "jdbc:mysql://Shos-Air.local/workticket";
-			String username = "awsuser";
-			String password = "abc123";
+			//String jdbcUrl = "jdbc:mysql://Shos-Air.local/workticket";
+			//String username = "awsuser";
+			//String password = "abc123";
 
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
@@ -62,11 +62,11 @@ public class WorkTicketDAO {
 			this.insertAnnotationStatement = conn.prepareStatement("INSERT INTO annotation (ticketId, authorUsername, text, datePosted) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			this.selectTicketAnnotationsStatement = conn.prepareStatement("SELECT annotationId, ticketId, authorUsername, text, datePosted FROM annotation WHERE ticketId = ? ORDER BY datePosted DESC");
 			//Ticket Prepared Statements
-			this.selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE ticketId = ?");
-			this.selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket ORDER BY datePosted ASC");
-			this.selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
-			this.updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ? WHERE ticketId = ?");
-			this.insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo) VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			this.selectTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo, status FROM ticket WHERE ticketId = ?");
+			this.selectAllTicketStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo, status FROM ticket ORDER BY datePosted ASC");
+			this.selectAllTicketAssignedToStatement = conn.prepareStatement("SELECT ticketId, datePosted, title, description, assignedTo, status FROM ticket WHERE assignedTo = ? ORDER BY datePosted ASC");
+			this.updateTicketStatement = conn.prepareStatement("UPDATE ticket SET datePosted = ?, title = ?, description = ?, assignedTo = ?, status = ? WHERE ticketId = ?");
+			this.insertTicketStatement = conn.prepareStatement("INSERT INTO ticket (datePosted, title, description, assignedTo, status) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			//User Prepared Statements
 			this.selectUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user WHERE username = ?");
 			this.selectAllUserStatement = conn.prepareStatement("SELECT username, passHash, email, name, role FROM user ORDER BY username");
@@ -206,7 +206,9 @@ public class WorkTicketDAO {
 						rs.getDate(2), // datePosted
 						rs.getString(3), // title
 						rs.getString(4), // description
-						rs.getString(5)); // assignedTo 
+						rs.getString(5), // assignedTo 
+						rs.getString(6) // status
+						); 
 			}
 		}
 		catch (SQLException e) {
@@ -229,7 +231,8 @@ public class WorkTicketDAO {
 							rs.getDate(2), // datePosted
 							rs.getString(3), // title
 							rs.getString(4), // description
-							rs.getString(5) // assignedTo 
+							rs.getString(5), // assignedTo
+							rs.getString(6) // status
 							));
 			}
 			return tickets;
@@ -255,7 +258,8 @@ public class WorkTicketDAO {
 							rs.getDate(2), // datePosted
 							rs.getString(3), // title
 							rs.getString(4), // description
-							rs.getString(5) // assignedTo 
+							rs.getString(5), // assignedTo
+							rs.getString(6) // status
 							));
 			}
 			return tickets;
@@ -278,7 +282,8 @@ public class WorkTicketDAO {
 				updateTicketStatement.setString(2, ticket.getTitle());
 				updateTicketStatement.setString(3, ticket.getDescription());
 				updateTicketStatement.setString(4, ticket.getAssignedTo());
-				updateTicketStatement.setInt(5, ticket.getTicketId());
+				updateTicketStatement.setString(5, ticket.getStatus());
+				updateTicketStatement.setInt(6, ticket.getTicketId());
 				updateTicketStatement.executeUpdate();
 				return ticket.getTicketId();
 			}
@@ -287,6 +292,7 @@ public class WorkTicketDAO {
 				insertTicketStatement.setString(2, ticket.getTitle());
 				insertTicketStatement.setString(3, ticket.getDescription());
 				insertTicketStatement.setString(4, ticket.getAssignedTo());
+				insertTicketStatement.setString(5, ticket.getStatus());
 				insertTicketStatement.executeUpdate();
 				ResultSet keys = insertTicketStatement.getGeneratedKeys();
 				keys.next();

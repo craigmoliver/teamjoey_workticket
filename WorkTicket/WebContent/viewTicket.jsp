@@ -34,11 +34,11 @@
   			<%-- Required if is new user --%>
   			<div class="row spacer">
 	  			<form action="/ticket" method="POST" id="assign" role="form" data-toggle="validator">
-	  				<label for="password" class="col-lg-2 control-label">Assigned To</label>
+	  				<label for="assignTo" class="col-lg-2 control-label">Assigned To</label>
 					<div class="col-lg-2">
 						<select name="assignTo" class="form-control">
 							<c:forEach items="${ticketHelper.users}" var="user" varStatus="status">
-								<%-- Emits TODO --%>
+								<%-- Emits user select item --%>
 								<c:if test="${ticketHelper.ticket.assignedTo.equals(user)}">
 									<%-- Select if assigned  --%>
 									<option value="${user}" selected>${user}</option>
@@ -55,6 +55,32 @@
 					</div>
 				    <input type="hidden" name="ticketId" value="${ticketHelper.ticket.ticketId}" />
 				    <input type="hidden" name="command" value="ticket_assign" />
+				</form>  		
+  			</div>
+  			<%-- Required if is new user --%>
+  			<div class="row spacer">
+	  			<form action="/ticket" method="POST" id="updatestatus" role="form" data-toggle="validator">
+	  				<label for="status" class="col-lg-2 control-label">Status</label>
+					<div class="col-lg-2">
+						<select name="assignTo" class="form-control">
+							<c:forEach items="${ticketHelper.statuses}" var="status" varStatus="status">
+								<%-- Emits status select item --%>
+								<c:if test="${ticketHelper.ticket.status.equals(status)}">
+									<%-- Select if equals status  --%>
+									<option value="${user}" selected>${user}</option>
+								</c:if>
+								<c:if test="${!ticketHelper.ticket.status.equals(status)}">
+									<%-- Unselected if not equals status--%>
+									<option value="${user}">${user}</option>
+								</c:if>
+							</c:forEach>
+						</select>
+					</div>
+					<div class="col-lg-8">
+						<button type="submit" class="btn btn-small">Update</button>
+					</div>
+				    <input type="hidden" name="ticketId" value="${ticketHelper.ticket.ticketId}" />
+				    <input type="hidden" name="command" value="ticket_updatestatus" />
 				</form>  		
   			</div>
   		</c:if>
@@ -76,7 +102,7 @@
 	    		</thead>
 	    		<tbody>
 	    			<c:forEach items="${ticketHelper.annotations}" var="annotation" varStatus="status">
-	    				<%-- Emits TODO --%>
+	    				<%-- Emits annotation details for selected ticket --%>
 	    				<tr>
 	    					<td><fmt:formatDate type="both" value="${annotation.datePostedAsDate}" dateStyle="short" timeStyle="short" /></td>
 	    					<td>${annotation.text}</td>

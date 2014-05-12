@@ -50,7 +50,7 @@ public class UserTicketTest extends TestCase{
 		UserDTO user = DAO.loadUser("shoPower");		
 		//instance3.session.setAttribute("userTicket", user);// testing for session
 		ArrayList<TicketDTO> ticketsUser = DAO.listTickets(user.getName());
-		assertEquals("The number of Sho tickets ",1,ticketsUser.size());
+		assertEquals("The number of Sho tickets ",1, ticketsUser.size());
 	}
 
 	/**
